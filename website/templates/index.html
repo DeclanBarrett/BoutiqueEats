@@ -24,7 +24,7 @@
         </div>
 
         <div class="col-12 col-md-6 col-lg-6">
-            <a class="btn btn-outline-dark float-end" href='postform.html' role="button">
+            <a class="btn btn-outline-dark float-end" href="{{url_for('main.createrestaurant')}}" role="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus"
                     viewBox="0 0 16 16">
                     <path
@@ -129,7 +129,7 @@
                     <div class="row">
                         <div class="col-6 col-lg-8 col-md-6">
                             <div class="card-title">
-                                <h5>ELSKA</h5>
+                                <h5>(PLACEHOLDER) ELSKA</h5>
                             </div>
                         </div>
 
@@ -168,6 +168,58 @@
                 </div>
             </div>
         </div>
+
+        <!-- A real filled in card - the above one is a holder till the create restaurant is built -->
+        {% for restaurant in restaurants %}
+        <div class="col-lg-4 col-md-12 pb-5 pb-lg-2 pb-md-5 pb-sm-4">
+            <div class="card">
+
+                <img src="../static/img/elska_2.png" class="card-img-top px-2 pt-2" alt="{{ restaurant.name }}">
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 col-lg-8 col-md-6">
+                            <div class="card-title">
+                                <h5>{{ restaurant.name }} </h5>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-4 col-md-6">
+                            <span class="badge rounded-pill bg-success float-end">(PLACEHOLDER)4.7&#9733;</span>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8 col-lg-6">
+                            <p class="card-text card-cuisine">
+                                {{ restaurant.cuisine_type }}
+                            </p>
+                        </div>
+
+                        <div class="col-4 col-lg-6 card-price">
+                            ${{ restaurant.price }} pp.
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="card-text card-location">
+                            {{ restaurant.suburb }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="card-text card-seats">
+                            one table left: tues, 16 october (PLACEHOLDER)
+                        </div>
+                    </div>
+
+
+                    <a href="{{url_for('main.restaurant')}}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 

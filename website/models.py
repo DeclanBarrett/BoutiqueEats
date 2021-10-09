@@ -1,6 +1,4 @@
 from sqlalchemy.orm import backref
-
-from website.views import restaurant
 from . import db
 from datetime import datetime
 from flask_login import UserMixin
