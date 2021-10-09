@@ -1,0 +1,154 @@
+body {
+    font-family: Didot, Palatino, Perpetua, serif;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.btn-align {
+    text-align: right
+}
+
+.book-line {
+    width: 90%;
+    transform: translateX(10%);
+}
+
+.booking-img {
+    width: 100%;
+    height: 20vh;
+    object-fit: cover;
+    border-radius: 2%;
+}
+
+.booking-card {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.card {
+    border-radius: 5%;
+    border: none;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 25vh;
+    object-fit: cover;
+    border-radius: 10%;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 18px;
+}
+
+.card-seats {
+    font-size: 16px;
+    color: #c93030;
+}
+.card-cuisine {
+    text-align: left;
+    color: #5f5f5f;
+}
+
+.card-price {
+    text-align: right;
+    font-size: 16px;
+    color: #5f5f5f;
+}
+
+.card-location {
+    text-align: left;
+    font-size: 16px;
+    color: #767676;
+}
+
+.card-rating {
+    text-align: right;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+.comment-author {
+    margin-top: 1px;
+    font-weight: 400;
+}
+
+.display-3 {
+    color: #ffffff;
+    font-family: 'Palatino Linotype', 'Verdana', sans-serif;
+}
+
+.hero {
+    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('img/banner_many.jpg');
+}
+
+.info-align {
+    text-align: right;
+}
+
+.info-line {
+    width: 40%;
+    transform: translateX(150%);
+}
+
+/* .img-fluid {
+    width: 100%;
+    height: 40vh auto;
+    border-radius: 2%
+} */
+
+.modal-dialog {
+    padding-right: 70px;
+}
+
+.modalBtn {
+    position: relative;
+ }
+
+.modalDate {
+     text-align: center;
+     font-size: 20px;
+ }
+
+p.info-heading {
+    font-weight: 500;
+}
+
+p.about {
+    text-align: right;
+    margin-left: auto;
+    font-size: 18px;
+}
+
+p.comment {
+    font-size: 18px;
+}
+
+p.seat-alert {
+    color: darkred;
+    margin-top: 5px;
+}
+
+.rating {
+    text-align: left;
+}
+
+span.badge {
+    font-size: 14px;
+    font-family: Candara, sans-serif;
+}
+
+
+

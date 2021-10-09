@@ -1,0 +1,364 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+    <div class="row mt-4 mb-1">
+        <div class="col-lg-4 col-sm-4">
+            <h1>ELSKA</h1>
+        </div>
+
+        <div class="col-lg-8 col-sm-8 rating">
+            <h3>4.7 &#9733;</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 col-sm-6">
+            <h4>modern australian, 15 courses</h4>
+            <h5>nordic-inspired cooking using native & local australian produce</h5>
+        </div>
+
+        <!-- Restaurant booking modal -->
+        <div class="col-lg-8 col-sm-6 btn-align mt-1">
+            <button type="button" class="btn btn-dark modalBtn" data-bs-toggle="modal" data-bs-target="#bookingModal">
+                reserve a table now
+            </button>
+
+            <div class="col-md-10">
+
+            </div>
+            <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingHeader" aria-hidden="true">
+                <div
+                    class="modal-dialog modal-fullscreen-sm-down modal-dialog-centered modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h5 class="modal-title w-100" id="bookingHeader">make a reservation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body pe-5">
+                            <div class="container-fluid">
+                                <div class="row mb-4">
+                                    <div class="col-lg-6 mt-4 mb-2 mb-lg-1 modalDate">
+                                        tuesday, 16 oct.
+                                    </div>
+
+                                    <div class="col-lg-2 ms-auto">
+                                        <form>
+                                            <label class="form-label" for="quantity">party size</label>
+                                            <select class="form-select" id="quantity">
+                                                <option value="1" selected>--</option>
+                                                <option value="2" disabled>1</option>
+                                                <option value="3">2</option>
+                                            </select>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-lg-3 ms-auto me-auto">
+                                        <form>
+                                            <label class="form-label" for="time">time</label>
+                                            <select class="form-select" id="quantity">
+                                                <option value="0" selected>--:--</option>
+                                                <option value="1">7:30pm</option>
+                                                <option value="2" disabled>8:00pm</option>
+                                            </select>
+                                        </form>
+                                    </div>
+
+                                </div>
+
+                                <hr class="book-line">
+
+                                <div class="row mt-4 mb-2 mb-lg-1">
+                                    <div class="col-lg-6 mb-3 mb-lg-1 modalDate">
+                                        thursday, 21 oct.
+                                    </div>
+
+                                    <div class="col-lg-2 pb-3 ms-auto">
+                                        <form>
+                                            <select class="form-select" id="quantity" disabled>
+                                                <option value="1" selected>1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-lg-3 ms-auto me-auto">
+                                        <form>
+                                            <select class="form-select" id="quantity" disabled>
+                                                <option value="1" selected>6:30pm</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <p class="seat-alert pe-4">booked out</p>
+                                </div>
+
+                                <hr class="book-line">
+
+                                <div class="row mt-4 mb-2 mb-lg-1">
+                                    <div class="col-lg-6 mb-2 modalDate">
+                                        saturday, 23 oct.
+                                    </div>
+
+                                    <div class="col-lg-2 pb-3 ms-auto">
+                                        <form>
+                                            <select class="form-select" id="quantity" disabled>
+                                                <option value="1" selected>1</option>
+                                                <option value="2">2</option>
+                                            </select>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-lg-3 ms-auto me-auto">
+                                        <form>
+                                            <select class="form-select" id="quantity" disabled>
+                                                <option value="1" selected>6:00pm</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <p class="seat-alert pe-4">booked out</p>
+                                </div>
+
+                                <hr class="book-line">
+
+                                <div class="row mt-4 mb-2 mb-lg-1">
+                                    <div class="col-lg-6 mb-2 modalDate">
+                                        wednesday, 3 nov.
+                                    </div>
+
+                                    <div class="col-lg-2 pb-3 ms-auto">
+                                        <form>
+                                            <select class="form-select" id="quantity" disabled>
+                                                <option value="1" selected>1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                            </select>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-lg-3 ms-auto me-auto">
+                                        <form>
+                                            <select class="form-select" id="quantity" disabled>
+                                                <option value="1" selected>6:30pm</option>
+                                                <option value="2">7:00pm</option>
+                                                <option value="3">7:30pm</option>
+                                                <option value="4">8:00pm</option>
+                                                <option value="5">8:30pm</option>
+                                            </select>
+                                        </form>
+                                    </div>
+
+
+                                    <p class="seat-alert pe-4">booked out</p>
+
+
+                                </div>
+
+                                <hr class="book-line">
+
+                                <div class="row mt-4 mb-2 mb-lg-1">
+                                    <div class="col-lg-6 mb-2 modalDate">
+                                        friday, 5 nov.
+                                    </div>
+
+                                    <div class="col-lg-2 pb-3 ms-auto">
+                                        <form>
+                                            <select class="form-select" id="quantity" disabled>
+                                                <option value="1" selected>1</option>
+                                                <option value="2">2</option>
+                                            </select>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-lg-3 ms-auto me-auto">
+                                        <form>
+                                            <select class="form-select" id="quantity" disabled>
+                                                <option value="2">8:00pm</option>
+                                                <option value="3" disabled>8:30pm</option>
+                                            </select>
+                                        </form>
+                                    </div>
+
+                                    <p class="seat-alert pe-4">booked out</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-dark" data-bs-target="#confirmationModal"
+                                data-bs-toggle="modal" data-bs-dismiss="modal">Continue</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="confirmationModal" aria-hidden="true" aria-labelledby="confModalHeader"
+                tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header text-center" style="background-color:#e6ffe6;">
+                            <h5 class="modal-title w-100" id="confModalHeader">table reserved!</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body pe-5">
+                            <div class="container-fluid">
+                                <div class="row text-center">
+                                    <p>Your reservation with ELSKA has been confirmed:</p>
+                                    <p>7:30pm Tuesday, 16 October for 2 people</p>
+                                    <p>Please keep your order ID for reference: #425921</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="seat-alert">one table left</p>
+        </div>
+    </div>
+
+
+    <div class="row mt-3 mb-3">
+        <div class="col-lg-5 col-sm-6">
+            <img src="img/elska_vertical.jpg" class="img-fluid">
+        </div>
+
+        <div class="col-lg-7 col-sm-6 info-align mt-3 mt-xl-0">
+            <p class="info-heading">
+                located at
+            </p>
+            <p>
+                148 Merthyr Road<br>New Farm
+            </p>
+
+            <hr class="info-line">
+
+            <p class="info-heading">
+                open
+            </p>
+            <p>
+                <i>thursday - saturday</i>
+                <br>6pm - late
+                <br><br><i>sunday</i>
+                <br>3pm - late
+            </p>
+
+            <hr class="info-line">
+
+            <p class="info-heading">
+                pricing
+            </p>
+            <p>
+                $135 pp.
+            </p>
+
+            <hr class="info-line">
+
+            <a href="https://www.elska.com.au/">visit the website</a>
+
+            <br><br><br>
+
+            <h2 align="right">about</h2>
+            <p class="about">
+                "Elska is an old Nordic translation for love; the love that we hold for food, connection and
+                family.<br><br>
+
+                When you are our guests at ELSKA we want you to feel relaxed and at home so you can enjoy the experience
+                of the night.<br><br>
+
+                ELSKA is an intimate twelve seated degustation restaurant focusing on the beautiful produce Australia
+                has to offer, highlighted with Nordic culinary techniques. The restaurant is a collaboration of Nathan’s
+                love for food and Freja’s passion for connection.<br><br>
+
+                The set menu is designed to take the guest on a journey of seasonality, passion and to evoke
+                emotions."<br><br>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mt-1">
+        <div class="col-lg-2">
+            <h2>comments</h2>
+        </div>
+
+        <div class="col-lg-10 mt-2">
+            <button type="button" class="btn btn-outline-dark btn-reserve">post a comment</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-lg-1 col-sm-2">
+                <img src="img/user_rock.jpg" class="avatar">
+            </div>
+            <div class="col-xl-11 col-lg-12 col-sm-10 mt-2 mt-xl-0 ">
+                <h4 class="comment-author">Dwight "The Stone" Smithson</h4>
+                <h5>4.6&#9733; on 14/03/2021</h5>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-lg-1 col-sm-2">
+
+            </div>
+            <div class="col-xl-11 col-lg-12 col-sm-10">
+                <p class="comment">
+                    10/10 would traverse through treacherous jungles to eat here again!
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-lg-1 col-sm-2">
+                <img src="img/user_neo.jpg" class="avatar">
+            </div>
+            <div class="col-xl-11 col-lg-12 col-sm-10 mt-2 mt-xl-0">
+                <h4 class="comment-author">Leo</h4>
+                <h5>4.1&#9733; on 29/02/2021</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-1 col-sm-2">
+
+            </div>
+            <div class="col-xl-11 col-lg-12 col-sm-10">
+                <p class="comment">
+                    The red pill I had the other day was better... This was pretty good too, though.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-lg-1 col-sm-2">
+                <img src="img/user_matt.jpg" class="avatar">
+            </div>
+            <div class="col-xl-11 col-lg-12 col-sm-10 mt-2 mt-xl-0">
+                <h4 class="comment-author">Michael McConnaneigh</h4>
+                <h5>4.9&#9733; on 18/02/2021</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-1 col-sm-2">
+
+            </div>
+            <div class="col-xl-11 col-lg-12 col-sm-10">
+                <p class="comment">
+                    Alright alright alright, now THIS is a good feed!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
