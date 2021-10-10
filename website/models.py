@@ -17,7 +17,6 @@ class User(db.Model, UserMixin):
     # relation to call user.comments and comment.created_by
     comments = db.relationship('Comment', backref='user')
     reservations = db.relationship('Reservation', backref='user')
-    restaurants = db.relationship('Restaurant', secondary='comments', backref=db.backref('commented_users'))
 
 # Comments on restaurants
 class Comment(db.Model):
@@ -40,8 +39,7 @@ class Restaurant(db.Model):
 
     restaurant_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    street_number = db.Column(db.Integer, nullable=False)
-    street_name = db.Column(db.String(150), nullable=False)
+    street = db.Column(db.String(150), nullable=False)
     suburb = db.Column(db.String(50), nullable=False)
 
     description = db.Column(db.String(300), nullable=False)

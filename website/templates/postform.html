@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
+
+
+{% for field, errors in form_restaurant.errors.items() %}
+<div class="alert alert-error">
+    {{ form_restaurant[field].label }}: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
+
 <div class="container">
     <div class="row mt-5 mb-2">
         <h2>post a restaurant</h2>
@@ -8,185 +17,152 @@
     <!-- Form section-->
     <div class="row">
         <div class="col-lg-8 col-md-9">
-            <form>
+            <form method="post" action="{{url_for('main.createrestaurant')}}" enctype=multipart/form-data>
+                {{ form_restaurant.csrf_token }}
                 <!-- Restaurant name & location-->
                 <div class="row mt-2 mb-2">
                     <div class="col-10">
-                        <label class="form-label" for="restaurantName">
-                            restaurant name
-                        </label>
-                        <input id="restaurantName" class="form-control" type="text" required>
+                        {{form_restaurant.restaurant_name.label (class="form-label") }}
+                        {{form_restaurant.restaurant_name (class="form-control")}}
                     </div>
                 </div>
 
                 <div class="row mt-3 mb-1 mt-md-3">
                     <div class="col-lg-5 col-md-9">
-                        <label class="form-label" for="streetName">
-                            street name
-                        </label>
-                        <input id="streetName" class="form-control" type="text" placeholder="123 Smith Street" required>
+                        {{form_restaurant.street.label (class="form-label") }}
+                        {{form_restaurant.street (class="form-control", placeholder="123 Smith Street")}}
                     </div>
 
                     <div class="col-lg-3 col-md-9 mt-3 mt-xl-0">
-                        <label class="form-label" for="suburbName">
-                            suburb
-                        </label>
-                        <input id="suburbName" class="form-control" type="text" required>
+                        {{form_restaurant.suburb.label (class="form-label") }}
+                        {{form_restaurant.suburb (class="form-control")}}
+
                     </div>
                 </div>
 
                 <!-- Cuisine type, # courses, and price -->
                 <div class="row mt-3 mb-2">
                     <div class="col-6 col-xl-2 col-lg-3 col-md-4">
-                        <label class="form-label" for="cuisineType">cuisine</label>
-                        <select id="cuisineType" class="form-select" required>
-                            <option value>select</option>
-                            <option>modern australian</option>
-                            <option>contemporary</option>
-                            <option>french</option>
-                            <option>italian</option>
-                            <option>japanese</option>
-                            <option>middle eastern</option>
-                            <option>mediterranean</option>
-                            <option>asian</option>
-                            <option>european</option>
-                        </select>
+                        {{form_restaurant.cuisine_type.label (class="form-label") }}
+                        {{form_restaurant.cuisine_type (class="form-control")}}
                     </div>
 
-                    <div class="col-7 col-xl-2 col-lg-3 col-md-4 mt-3 mt-xl-0">
-                        <label class="form-label" for="courseNum">num. of courses</label>
-                        <input id="courseNum" class="form-control" type="number" min="1" max="20" required>
+                    <div class="col-7 col-xl-2 col-lg-3 col-md-4">
+                        {{form_restaurant.num_courses.label (class="form-label") }}
+                        {{form_restaurant.num_courses (class="form-control")}}
                     </div>
 
-                    <div class="col-7 col-xl-2 col-lg-3 col-md-4 mt-3 mt-xl-0">
-                        <label class="form-label" for="price">price per person</label>
+                    <div class="col-7 col-xl-2 col-lg-3 col-md-4">
+
+                        {{form_restaurant.price.label (class="form-label") }}
                         <div class="input-group">
                             <span class="input-group-text">$</span>
-                            <input type="text" class="form-control" id="price">
+                            {{form_restaurant.price (class="form-control")}}
                         </div>
-
                     </div>
                 </div>
 
+                <!-- Description-->
                 <div class="row mt-3 mb-2">
-                    <div class="col-xl-6 col-lg-7">
-                        <label class="form-label" for="caption">caption</label>
-                        <input type="text" class="form-control" id="caption"
-                            placeholder="short & sweet summary of the restaurant">
+                    <div class="col-lg-8">
+                        {{form_restaurant.description.label (class="form-label") }}
+                        {{form_restaurant.description (class="form-control",
+                        placeholder="this will be the 'about' section",
+                        rows="4")}}
                     </div>
                 </div>
 
 
-        </div>
-        <!-- Description-->
-        <div class="row mt-3 mb-2">
-            <div class="col-lg-8">
-                <label class="form-label" for="description">description</label>
-                <textarea class="form-control" id="description" rows="4" placeholder="this will be the 'about' section"
-                    required></textarea>
-            </div>
-        </div>
-
-
-        <!-- Photo upload-->
-        <div class="row mt-3 mb-2">
-            <div class="col-lg-5 col-md-8">
-                <label class="form-label" for="photoupload">upload a photo</label>
-                <input class="form-control" type="file" id="photoupload">
-            </div>
-        </div>
-
-        <!-- Status -->
-        <div class="row mt-3 mb-2">
-            <label class="form-label">set status</label>
-            <div class="col-lg-8">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="upcoming" checked>
-                    <label class="form-check-label" for="upcoming">upcoming</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inactive" value="inactive">
-                    <label class="form-check-label" for="inactive">inactive</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="booked">
-                    <label class="form-check-label" for="booked">booked</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="cancelled">
-                    <label class="form-check-label" for="cancelled">cancelled</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Link to website -->
-        <div class="row mt-3 mb-2">
-            <div class="col-lg-8 col-md-8">
-                <label class="form-label" for="site-link">website link</label>
-                <div class="input-group">
-                    <span class="input-group-text">https://</span>
-                    <input type="text" class="form-control" id="site-link">
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-12 col-lg-5">
-                <h4>enter reservation details</h4>
-            </div>
-
-            <div class="col col-lg-6 ">
-                <div class="row">
-                    <div class="col-xl-4 col-lg-5">
-                        <button class="btn btn-outline-dark" type="button" id="reserveAdd">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                class="bi bi-plus" viewBox="0 0 16 16">
-                                <path
-                                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                            </svg>
-                            add reservation
-                        </button>
+                <!-- Photo upload-->
+                <div class="row mt-3 mb-2">
+                    <div class="col-lg-5 col-md-8">
+                        {{ form_restaurant.image.label (class="form-label") }}
+                        {{ form_restaurant.image (class="form-control")}}
                     </div>
                 </div>
-            </div>
 
-            <div class="row" id="reserveContainer">
-                <div class="col-12 col-lg- col-md-10 mt-3" id="reserveSection">
-                    <section id="reserveCard">
-                        <div class="shadow p-3 mb-3 bg-body rounded">
+                <!-- Status -->
+                <div class="row mt-3 mb-2">
+                    {{form_restaurant.status.label (class="form-label")}}
+                    <div class="col-lg-8">
+                        {% for subfield in form_restaurant.status %}
 
-                            <div class="col-12 col-lg-8 col-md-10">
-                                <div class="row mt-3">
-                                    <div class="col-8 col-lg-4 col-md-4 mb-3 mb-xl-0">
-                                        <div class="form-label" for="date">reservation date</div>
-                                        <input id="date" class="form-control" type="date" min="2021-11-01"
-                                            max="2021-11-30" required>
-                                    </div>
+                        <div class="form-check form-check-inline">
+                            {{ subfield (class="form-check-input") }}
+                            {{ subfield.label (class="form-check-label") }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-                                    <div class="col-6 col-lg-4 col-md-4 mb-3 mb-xl-0">
-                                        <div class="form-label" for="reservtime">time</div>
-                                        <input id="reservtime" class="form-control" type="time" required>
-                                    </div>
+                <!-- Link to website -->
+                <div class="row mt-3 mb-2">
+                    <div class="col-lg-8 col-md-8">
+                        {{form_restaurant.website.label (class="form-label") }}
+                        <div class="input-group">
+                            <span class="input-group-text">https://</span>
+                            {{form_restaurant.website (class="form-control")}}
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="row mt-4">
+                    <div class="col-12 col-lg-5">
+                        <h4>enter reservation details</h4>
+                    </div>
 
-                                    <div class="col-6 col-lg-4 col-md-4">
-                                        <div class="form-label" for="quantity">quantity</div>
-                                        <input id="quantity" class="form-control" type="number" min="1" max="20"
-                                            required>
-                                    </div>
-                                </div>
+                    <div class="col col-lg-6 ">
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-5">
+                                <button class="btn btn-outline-dark" type="button" id="reserveAdd">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-plus" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                    </svg>
+                                    add reservation
+                                </button>
                             </div>
                         </div>
-                    </section>
+                    </div>
+
+                    <div class="row" id="reserveContainer">
+                        <div class="col-12 col-lg- col-md-10 mt-3" id="reserveSection">
+                            <section id="reserveCard">
+                                <div class="shadow p-3 mb-3 bg-body rounded">
+
+                                    <div class="col-12 col-lg-8 col-md-10">
+                                        <div class="row mt-3">
+                                            <div class="col-8 col-lg-4 col-md-4 mb-3 mb-xl-0">
+                                                <div class="form-label" for="date">reservation date</div>
+                                                <input id="date" class="form-control" type="date" min="2021-11-01"
+                                                    max="2021-11-30" required>
+                                            </div>
+
+                                            <div class="col-6 col-lg-4 col-md-4 mb-3 mb-xl-0">
+                                                <div class="form-label" for="reservtime">time</div>
+                                                <input id="reservtime" class="form-control" type="time" required>
+                                            </div>
+
+                                            <div class="col-6 col-lg-4 col-md-4">
+                                                <div class="form-label" for="quantity">quantity</div>
+                                                <input id="quantity" class="form-control" type="number" min="1" max="20"
+                                                    required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                -->
+                <div class="row mt-5 mb-5">
+                    <div class="col-lg-4">
+                        <!--<button class="btn btn-outline-dark" type="submit">submit post</button>-->
+                        {{ form_restaurant.submit (class="btn btn-outline-dark") }}
+                    </div>
                 </div>
-            </div>
-            <div class="row mt-5 mb-5">
-                <div class="col-lg-4">
-                    <button class="btn btn-outline-dark" type="submit">submit post</button>
-                </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 </div>
