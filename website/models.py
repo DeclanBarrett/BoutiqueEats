@@ -41,20 +41,15 @@ class Restaurant(db.Model):
     name = db.Column(db.String(100), nullable=False)
     street = db.Column(db.String(150), nullable=False)
     suburb = db.Column(db.String(50), nullable=False)
+    max_reservations = db.Column(db.Integer)
 
-    description = db.Column(db.String(300), nullable=False)
+    description = db.Column(db.String(400), nullable=False)
 
     price = db.Column(db.Integer)
 
     cuisine_type = db.Column(db.String(30), nullable=False)
 
     num_courses = db.Column(db.Integer, nullable=False)
-
-
-    # This can be gathered from the comments
-    # rating = db.Column(db.Integer)
-
-    num_reservations = db.Column(db.Integer)
 
     website = db.Column(db.String(400))
 

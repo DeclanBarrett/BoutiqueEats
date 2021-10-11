@@ -53,6 +53,11 @@
                     </div>
 
                     <div class="col-7 col-xl-2 col-lg-3 col-md-4">
+                        {{form_restaurant.max_num_reservations.label (class="form-label") }}
+                        {{form_restaurant.max_num_reservations (class="form-control")}}
+                    </div>
+
+                    <div class="col-7 col-xl-2 col-lg-3 col-md-4">
 
                         {{form_restaurant.price.label (class="form-label") }}
                         <div class="input-group">
@@ -60,6 +65,7 @@
                             {{form_restaurant.price (class="form-control")}}
                         </div>
                     </div>
+
                 </div>
 
                 <!-- Description-->
@@ -100,7 +106,7 @@
                     <div class="col-lg-8 col-md-8">
                         {{form_restaurant.website.label (class="form-label") }}
                         <div class="input-group">
-                            <span class="input-group-text">https://</span>
+                            <span class="input-group-text">URL</span>
                             {{form_restaurant.website (class="form-control")}}
                         </div>
                     </div>

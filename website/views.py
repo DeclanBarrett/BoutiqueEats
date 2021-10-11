@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, url_for
 from flask_login.utils import login_required
 from website.forms import RestaurantForm
-from website.models import Restaurant
+from website.models import Restaurant, RestaurantStatus
 from . import db
 import os
 from werkzeug.utils import redirect, secure_filename
+from sqlalchemy import desc
 
 bp = Blueprint('main', __name__)
 
@@ -12,7 +13,10 @@ bp = Blueprint('main', __name__)
 @bp.route('/')
 def index():
     restaurants = Restaurant.query.all()
-    return render_template("index.html", restaurants=restaurants)
+    statuses = []
+    for restaurant in restaurants:
+        statuses.append(RestaurantStatus.query.filter_by(restaurant=restaurant).order_by(desc(RestaurantStatus.at_time)).first())
+    return render_template("index.html", restaurants=restaurants, restaurant_statuses=statuses)
 
 @bp.route('/restaurant')
 def restaurant():
@@ -35,11 +39,16 @@ def createrestaurant():
                                 description=form_restaurant.description.data,
                                 price=form_restaurant.price.data,
                                 cuisine_type=form_restaurant.cuisine_type.data,
+                                max_reservations=form_restaurant.max_num_reservations.data,
                                 num_courses=form_restaurant.num_courses.data,
                                 website=form_restaurant.website.data,
                                 image=db_file_path)
+        restaurant_status = RestaurantStatus(status=form_restaurant.status.data,
+                                            restaurant=restaurant)
         db.session.add(restaurant)
+        db.session.add(restaurant_status)
         db.session.commit()
+        
         return redirect(url_for('main.index'))
     return render_template("postform.html",form_restaurant=form_restaurant)
 

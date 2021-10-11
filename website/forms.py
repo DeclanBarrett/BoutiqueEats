@@ -1,11 +1,17 @@
 
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField,SubmitField, StringField, PasswordField, IntegerField, FileField
+from wtforms.fields import TextAreaField,SubmitField, StringField, PasswordField, IntegerField, FileField, DateTimeField
 from wtforms.fields.core import RadioField, SelectField
-from wtforms.validators import URL, InputRequired, Length, Email, EqualTo, NoneOf, NumberRange
+from wtforms.fields.html5 import URLField
+from wtforms.validators import URL, InputRequired, Length, Email, EqualTo, NoneOf, NumberRange, ValidationError
 from flask_wtf.file import FileRequired, FileField, FileAllowed
+from datetime import datetime
 
 ALLOWED_FILE = {'PNG', 'JPG', 'png', 'jpg'}
+
+def validate_date(form, field):
+        if field.data < datetime.date.today():
+            raise ValidationError("The date cannot be in the past!")
 
 #creates the login information
 class LoginForm(FlaskForm):
@@ -38,10 +44,11 @@ class RestaurantForm(FlaskForm):
     ("french","french"),("italian","italian"),("japanese","japanese"),("middle eastern", "middle eastern"),("mediterranean","mediterranean"),
     ("asian", "asian"),("european","european")], validators=[InputRequired()])
 
-    description = TextAreaField("description", validators=[InputRequired(), Length(min=10, max=200)])
+    description = TextAreaField("description", validators=[InputRequired(), Length(min=10, max=400)])
     price = IntegerField("price per person", validators=[NumberRange(min=0)])
     num_courses = IntegerField("num. of courses", validators=[NumberRange(1, 20), InputRequired()])
-    website = StringField("website", validators=[URL()])
+    max_num_reservations = IntegerField("num. available spots", validators=[InputRequired()])
+    website = URLField("website")
     image = FileField('restaurant image',
                       validators=[
                           FileRequired(message='Image cannot be empty'),
@@ -56,3 +63,11 @@ class RestaurantForm(FlaskForm):
 class RestaurantStatusForm(FlaskForm):
     status = RadioField("status", choices=["upcoming", "inactive", "booked", "cancelled"])
     submit = SubmitField("Set Status")
+
+class ReservationForm(FlaskForm):
+    quantity = IntegerField("quantity", validators=[InputRequired(), NumberRange(min=0)])
+    time = DateTimeField("reservation date", validators=[InputRequired(), validate_date])
+    order = TextAreaField("order", validators=[InputRequired(), Length(max=300)])
+    submit = SubmitField("reserve")
+
+    
