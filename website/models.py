@@ -43,6 +43,7 @@ class Restaurant(db.Model):
     suburb = db.Column(db.String(50), nullable=False)
     max_reservations = db.Column(db.Integer)
 
+    caption = db.Column(db.String(200), nullable=False)
     description = db.Column(db.String(400), nullable=False)
 
     price = db.Column(db.Integer)

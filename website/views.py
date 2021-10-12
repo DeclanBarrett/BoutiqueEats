@@ -36,6 +36,7 @@ def createrestaurant():
         restaurant = Restaurant(name=form_restaurant.restaurant_name.data,
                                 street=form_restaurant.street.data,
                                 suburb=form_restaurant.suburb.data,
+                                caption=form_restaurant.caption.data,
                                 description=form_restaurant.description.data,
                                 price=form_restaurant.price.data,
                                 cuisine_type=form_restaurant.cuisine_type.data,

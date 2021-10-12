@@ -44,6 +44,7 @@ class RestaurantForm(FlaskForm):
     ("french","french"),("italian","italian"),("japanese","japanese"),("middle eastern", "middle eastern"),("mediterranean","mediterranean"),
     ("asian", "asian"),("european","european")], validators=[InputRequired()])
 
+    caption = StringField('caption', validators=[InputRequired(), Length(max=200)])
     description = TextAreaField("description", validators=[InputRequired(), Length(min=10, max=400)])
     price = IntegerField("price per person", validators=[NumberRange(min=0)])
     num_courses = IntegerField("num. of courses", validators=[NumberRange(1, 20), InputRequired()])
@@ -69,5 +70,9 @@ class ReservationForm(FlaskForm):
     time = DateTimeField("reservation date", validators=[InputRequired(), validate_date])
     order = TextAreaField("order", validators=[InputRequired(), Length(max=300)])
     submit = SubmitField("reserve")
+
+class CommentForm(FlaskForm):
+    text = TextAreaField("comment", validators=[InputRequired(), Length(max=400)])
+    user_rating = IntegerField("rating /5", validators=[InputRequired(), NumberRange(min=0, max=5)])
 
     
