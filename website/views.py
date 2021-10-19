@@ -23,6 +23,7 @@ def restaurant():
     return render_template("restaurant.html")
 
 @bp.route('/bookings')
+@login_required
 def bookings():
     return render_template("bookings.html")
 
