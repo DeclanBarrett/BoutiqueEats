@@ -28,7 +28,7 @@ def bookings():
     return render_template("bookings.html")
 
 @bp.route('/createrestaurant', methods=["GET", "POST"])
-@login_required
+@login_required 
 def createrestaurant():
     form_restaurant = RestaurantForm()
     if form_restaurant.validate_on_submit():
