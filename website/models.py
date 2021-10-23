@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(100), index=True, nullable=False)
     phone_number = db.Column(db.String(10), nullable=True)
+    #image = db.Column(db.String(400), nullable=False)
 
     # relation to call user.comments and comment.created_by
     comments = db.relationship('Comment', backref='user')
