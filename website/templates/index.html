@@ -189,8 +189,13 @@
                             {% for comment in restaurant.comments %}
                             {% if average.append(comment.user_rating) %} {% endif %}
                             {% endfor %}
-                            <span class="badge rounded-pill bg-success float-end">{{ average | sum / average | count
-                                }}&#9733;</span>
+                            <span class="badge rounded-pill bg-success float-end">
+                                {% if average|count > 0 %}
+                                {{ average | sum / average | count}}
+                                {% else %}
+                                3
+                                {% endif %}
+                                &#9733;</span>
 
                         </div>
                     </div>

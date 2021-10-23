@@ -13,7 +13,11 @@
             {% for comment in restaurant.comments %}
             {% if average.append(comment.user_rating) %} {% endif %}
             {% endfor %}
-            <h3> {{ average | sum / average | count }}&#9733;</h3>
+            <h3> {% if average|count > 0 %}
+                {{ average | sum / average | count}}
+                {% else %}
+                3
+                {% endif %}&#9733;</h3>
         </div>
     </div>
 
