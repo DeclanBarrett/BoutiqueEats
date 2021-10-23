@@ -30,7 +30,16 @@ class RegisterForm(FlaskForm):
     #linking two fields - password should be equal to data entered in confirm
     password=PasswordField("Password", validators=[InputRequired(),
                   EqualTo('confirm', message="Passwords should match")])
+
+    image = FileField('profile picture',
+                      validators=[
+                          FileAllowed(ALLOWED_FILE,
+                                      message='Only supports png,jpg,JPG,PNG')
+                      ])
+
     confirm = PasswordField("Confirm Password")
+
+
 
     #submit button
     submit = SubmitField("Register")

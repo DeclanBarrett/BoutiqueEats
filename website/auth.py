@@ -7,7 +7,7 @@ from .forms import LoginForm,RegisterForm
 from flask_login import login_user, login_required,logout_user
 from . import db
 from .models import User
-
+from website.file_checker import check_upload_file, set_default_photo
 
 #create a blueprint
 bp = Blueprint('auth', __name__)
@@ -42,6 +42,7 @@ def login(): #view function
 @bp.route("/register", methods=["GET", "POST"])
 def register():
     register = RegisterForm()
+    
     #the validation of form submis is fine
     if (register.validate_on_submit() == True):
         #get username, password and email from the form
@@ -49,6 +50,7 @@ def register():
         pwd = register.password.data
         email = register.email_id.data
         #check if a user exists
+        
         u1 = User.query.filter_by(name=uname).first()
         if u1:
             flash('User name already exists, please login')
@@ -56,7 +58,12 @@ def register():
         # don't store the password - create password hash
         pwd_hash = generate_password_hash(pwd)
         #create a new user model object
-        new_user = User(name=uname, password_hash=pwd_hash, email=email)
+
+        db_file_path = None
+        if register.image.data:
+            db_file_path = check_upload_file(register)
+        new_user = User(name=uname, password_hash=pwd_hash, email=email, image=db_file_path)
+
         db.session.add(new_user)
         db.session.commit()
         #commit to the database and redirect to HTML page

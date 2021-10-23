@@ -318,7 +318,7 @@
     {% for comment in restaurant.comments %}
     <div class="row mt-4">
         <div class="col-lg-1 col-sm-2">
-            <img src="img/user_rock.jpg" class="avatar">
+            <img src="{{ comment.user.image }}" class="avatar">
         </div>
         <div class="col-xl-11 col-lg-12 col-sm-10 mt-2 mt-xl-0 ">
             <h4 class="comment-author"> {{ comment.user.name }} </h4>
