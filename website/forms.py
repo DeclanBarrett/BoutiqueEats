@@ -74,5 +74,6 @@ class ReservationForm(FlaskForm):
 class CommentForm(FlaskForm):
     text = TextAreaField("comment", validators=[InputRequired(), Length(max=400)])
     user_rating = IntegerField("rating /5", validators=[InputRequired(), NumberRange(min=0, max=5)])
+    submit = SubmitField("post comment")
 
     

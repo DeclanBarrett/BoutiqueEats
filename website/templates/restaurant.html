@@ -5,18 +5,22 @@
 
     <div class="row mt-4 mb-1">
         <div class="col-lg-4 col-sm-4">
-            <h1>ELSKA</h1>
+            <h1>{{ restaurant.name }}</h1>
         </div>
 
         <div class="col-lg-8 col-sm-8 rating">
-            <h3>4.7 &#9733;</h3>
+            {% set average = [] %}
+            {% for comment in restaurant.comments %}
+            {% if average.append(comment.user_rating) %} {% endif %}
+            {% endfor %}
+            <h3> {{ average | sum / average | count }}&#9733;</h3>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-4 col-sm-6">
-            <h4>modern australian, 15 courses</h4>
-            <h5>nordic-inspired cooking using native & local australian produce</h5>
+            <h4>{{ restaurant.cuisine_type}}, {{restaurant.num_courses}} courses</h4>
+            <h5>{{ restaurant.caption }}</h5>
         </div>
 
         <!-- Restaurant booking modal -->
@@ -226,7 +230,7 @@
 
     <div class="row mt-3 mb-3">
         <div class="col-lg-5 col-sm-6">
-            <img src="img/elska_vertical.jpg" class="img-fluid">
+            <img src="{{ restaurant.image }}" class="img-fluid">
         </div>
 
         <div class="col-lg-7 col-sm-6 info-align mt-3 mt-xl-0">
@@ -234,7 +238,7 @@
                 located at
             </p>
             <p>
-                148 Merthyr Road<br>New Farm
+                {{ restaurant.street }}<br> {{ restaurant.suburb }}
             </p>
 
             <hr class="info-line">
@@ -255,29 +259,18 @@
                 pricing
             </p>
             <p>
-                $135 pp.
+                ${{ restaurant.price }} pp.
             </p>
 
             <hr class="info-line">
 
-            <a href="https://www.elska.com.au/">visit the website</a>
+            <a href="{{ restaurant.website}}">visit the website</a>
 
             <br><br><br>
 
             <h2 align="right">about</h2>
             <p class="about">
-                "Elska is an old Nordic translation for love; the love that we hold for food, connection and
-                family.<br><br>
-
-                When you are our guests at ELSKA we want you to feel relaxed and at home so you can enjoy the experience
-                of the night.<br><br>
-
-                ELSKA is an intimate twelve seated degustation restaurant focusing on the beautiful produce Australia
-                has to offer, highlighted with Nordic culinary techniques. The restaurant is a collaboration of Nathan’s
-                love for food and Freja’s passion for connection.<br><br>
-
-                The set menu is designed to take the guest on a journey of seasonality, passion and to evoke
-                emotions."<br><br>
+                {{ restaurant.description }}<br><br>
             </p>
         </div>
     </div>
@@ -288,35 +281,62 @@
         <div class="col-lg-2">
             <h2>comments</h2>
         </div>
-
-        <div class="col-lg-10 mt-2">
-            <button type="button" class="btn btn-outline-dark btn-reserve">post a comment</button>
-        </div>
     </div>
 
-    <div class="container">
-        <div class="row mt-4">
-            <div class="col-lg-1 col-sm-2">
-                <img src="img/user_rock.jpg" class="avatar">
-            </div>
-            <div class="col-xl-11 col-lg-12 col-sm-10 mt-2 mt-xl-0 ">
-                <h4 class="comment-author">Dwight "The Stone" Smithson</h4>
-                <h5>4.6&#9733; on 14/03/2021</h5>
+
+    {% if current_user.is_authenticated %}
+    <form method="post" action="{{url_for('restaurants.restaurant', id=restaurant.restaurant_id)}}/comment">
+        {{ comment_form.csrf_token }}
+        <div class="row mt-3 mb-2">
+            <div class="col-10">
+                {{comment_form.text.label (class="form-label") }}
+                {{comment_form.text (class="form-control")}}
             </div>
         </div>
-        <div class="row mt-1">
-            <div class="col-lg-1 col-sm-2">
-
-            </div>
-            <div class="col-xl-11 col-lg-12 col-sm-10">
-                <p class="comment">
-                    10/10 would traverse through treacherous jungles to eat here again!
-                </p>
-            </div>
+        <div class="col-6 col-sm-3">
+            {{comment_form.user_rating.label (class="form-label") }}
+            {{comment_form.user_rating (class="form-control")}}
         </div>
+        <div class="col-6 col-sm-3">
+            {{ comment_form.submit (class="btn btn-outline-dark my-2") }}
+        </div>
+    </form>
 
+
+    {% else %}
+    <div class="d-grid gap-2">
+        <a class="btn btn-warning bg-warning" type="button" href="{{ url_for('auth.login') }}">LOGIN TO POST
+            COMMENTS</a>
     </div>
 
+    {% endif %}
+
+    {% for comment in restaurant.comments %}
+    <div class="row mt-4">
+        <div class="col-lg-1 col-sm-2">
+            <img src="img/user_rock.jpg" class="avatar">
+        </div>
+        <div class="col-xl-11 col-lg-12 col-sm-10 mt-2 mt-xl-0 ">
+            <h4 class="comment-author"> {{ comment.user.name }} </h4>
+            <h5>{{ comment.user_rating }}&#9733; on {{ comment.post_date.strftime("%a, %d %B") }} </h5>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col-lg-1 col-sm-2">
+
+        </div>
+        <div class="col-xl-11 col-lg-12 col-sm-10">
+            <p class="comment">
+                {{ comment.text }}
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+<!--
     <div class="container">
         <div class="row mt-4">
             <div class="col-lg-1 col-sm-2">
@@ -360,5 +380,6 @@
             </div>
         </div>
     </div>
+-->
 </div>
 {% endblock %}

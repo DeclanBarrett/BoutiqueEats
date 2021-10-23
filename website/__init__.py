@@ -43,6 +43,7 @@ def create_app():
     from . import auth, views
     app.register_blueprint(auth.bp)
     app.register_blueprint(views.bp)
+    app.register_blueprint(views.restaurant_bp)
     
     return app
 
