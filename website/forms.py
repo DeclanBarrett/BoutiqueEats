@@ -1,8 +1,8 @@
 
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField,SubmitField, StringField, PasswordField, IntegerField, FileField, DateTimeField
+from wtforms.fields import TextAreaField,SubmitField, StringField, PasswordField, IntegerField, FileField
 from wtforms.fields.core import RadioField, SelectField
-from wtforms.fields.html5 import URLField
+from wtforms.fields.html5 import URLField, DateTimeLocalField
 from wtforms.validators import URL, InputRequired, Length, Email, EqualTo, NoneOf, NumberRange, ValidationError
 from flask_wtf.file import FileRequired, FileField, FileAllowed
 from datetime import datetime
@@ -76,7 +76,7 @@ class RestaurantStatusForm(FlaskForm):
 
 class ReservationForm(FlaskForm):
     quantity = IntegerField("quantity", validators=[InputRequired(), NumberRange(min=0)])
-    time = DateTimeField("reservation date", validators=[InputRequired(), validate_date])
+    time = DateTimeLocalField("reservation date", validators=[InputRequired(), validate_date])
     order = TextAreaField("order", validators=[InputRequired(), Length(max=300)])
     submit = SubmitField("reserve")
 

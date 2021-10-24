@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, url_for
 from flask_login.utils import login_required, current_user
-from website.forms import CommentForm, RestaurantForm
+from website.forms import CommentForm, RestaurantForm, ReservationForm
 from website.models import Restaurant, RestaurantStatus, Comment
 from . import db
 import os
@@ -55,8 +55,9 @@ def createrestaurant():
 @restaurant_bp.route('/<id>')
 def restaurant(id):
     comment_form = CommentForm()
+    reservation_form = ReservationForm()
     restaurant = Restaurant.query.filter_by(restaurant_id = id).first()
-    return render_template("restaurant.html", restaurant=restaurant, comment_form=comment_form)
+    return render_template("restaurant.html", restaurant=restaurant, comment_form=comment_form, reservation_form=reservation_form)
 
 @restaurant_bp.route('/<restaurant>/comment', methods=["GET", "POST"])
 def comment(restaurant):

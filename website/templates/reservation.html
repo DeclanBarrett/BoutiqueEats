@@ -1,0 +1,76 @@
+{% macro reservation_creation(restaurant, reservation_form) -%}
+<div class="col-lg-8 col-sm-6 btn-align mt-1">
+    <button type="button" class="btn btn-dark modalBtn" data-bs-toggle="modal" data-bs-target="#bookingModal">
+        reserve a table now
+    </button>
+
+    <div class="col-md-10">
+
+    </div>
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingHeader" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header text-center">
+                    <h5 class="modal-title w-100" id="bookingHeader">make a reservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body pe-5">
+                    <div class="container-fluid">
+
+                        <div class="col-10">
+                            {{reservation_form.quantity.label (class="form-label") }}
+                            {{reservation_form.quantity (class="form-control")}}
+                        </div>
+
+                        <div class="col-10">
+                            {{reservation_form.time.label (class="form-label") }}
+                            {{reservation_form.time (class="form-control datetime-local")}}
+                        </div>
+
+                        <div class="col-10">
+                            {{reservation_form.order.label (class="form-label") }}
+                            {{reservation_form.order (class="form-control")}}
+                        </div>
+
+                        <div class="col-10">
+                            {{ reservation_form.submit (class="btn btn-outline-dark") }}
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" data-bs-target="#confirmationModal"
+                        data-bs-toggle="modal" data-bs-dismiss="modal">Continue</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmationModal" aria-hidden="true" aria-labelledby="confModalHeader" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header text-center" style="background-color:#e6ffe6;">
+                    <h5 class="modal-title w-100" id="confModalHeader">table reserved!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pe-5">
+                    <div class="container-fluid">
+                        <div class="row text-center">
+                            <p>Your reservation with ELSKA has been confirmed:</p>
+                            <p>7:30pm Tuesday, 16 October for 2 people</p>
+                            <p>Please keep your order ID for reference: #425921</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="seat-alert">one table left</p>
+</div>
+
+{%- endmacro %}

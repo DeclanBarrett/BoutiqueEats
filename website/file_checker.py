@@ -21,16 +21,3 @@ def check_upload_file(form):
     #save the file and return the db upload path
     fp.save(upload_path)
     return db_upload_path
-
-def set_default_photo():
-    default_photo = "account.png"
-    BASE_PATH = os.path.dirname(__file__)
-    #upload file location – directory of this file/static/image
-    upload_path = os.path.join(BASE_PATH, image_files_location, default_photo)
-    print("DEFAULT PHOTO: " + upload_path)
-    return Image.open(upload_path)
-
-
-    #CAN EITHER DO IT AT THE DATABASE LEVEL AND ATTEMPT TO SKIP VALIDATION IF EMPTY
-
-    #OR FILL IT WITH THE NEW ONE

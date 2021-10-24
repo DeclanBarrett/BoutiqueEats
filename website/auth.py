@@ -7,7 +7,7 @@ from .forms import LoginForm,RegisterForm
 from flask_login import login_user, login_required,logout_user
 from . import db
 from .models import User
-from website.file_checker import check_upload_file, set_default_photo
+from website.file_checker import check_upload_file
 
 #create a blueprint
 bp = Blueprint('auth', __name__)
