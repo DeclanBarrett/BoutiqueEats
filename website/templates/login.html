@@ -1,0 +1,62 @@
+{% include "base.html" %}
+{% block content %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+<div class="container">
+    <div class="container-fluid">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="close">x</button> -->
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    
+    <div class="row mt-5 mb-2">
+        <h2>{{heading}}</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 col-md-9">
+            <form method="post" action="{{ url_for('auth.login') }}" enctype=multipart/form-data>
+                {{ login_form.csrf_token }}
+                <div class="row mt-2 mb-2">
+                    <div class="col-5">
+                        {{ login_form.user_name.label (class="form-label") }}
+                        {{ login_form.user_name (class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="row mt-3 mb-1 mt-md-3">
+                    <div class="col-5">
+                        {{ login_form.password.label (class="form-label") }}
+                        {{ login_form.password (class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="row mt-3 mb-1">
+                    <div class="col-lg-4">
+                        {{ login_form.submit (class="btn btn-outline-dark") }}
+                    </div>
+                </div>
+
+                {% if heading|lower =='login' %}
+                <div class="mt-2 col-md-4">
+                 <p>New user? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Form rendering is simple and easy if using bootstrap -->
+
+<!-- When you have login form, then do show the user a link to register -->
+
+
+{% endblock %}

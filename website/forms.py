@@ -15,20 +15,19 @@ def validate_date(form, field):
 
 #creates the login information
 class LoginForm(FlaskForm):
-    user_name=StringField("Username", validators=[InputRequired('Enter user name')])
-    password=PasswordField("Password", validators=[InputRequired('Enter user password')])
-    submit = SubmitField("Login")
+    user_name=StringField("username", validators=[InputRequired('Enter user name')])
+    password=PasswordField("password", validators=[InputRequired('Enter user password')])
+    submit = SubmitField("login")
 
  # this is the registration form
 class RegisterForm(FlaskForm):
-    user_name=StringField("User Name", validators=[InputRequired()])
-    email_id = StringField("Email Address", validators=[Email("Please enter a valid email")])
+    user_name=StringField("username", validators=[InputRequired()])
+    email_id = StringField("email address", validators=[Email("Please enter a valid email")])
     
     #add buyer/seller - check if it is a buyer or seller hint : Use RequiredIf field
 
-
     #linking two fields - password should be equal to data entered in confirm
-    password=PasswordField("Password", validators=[InputRequired(),
+    password = PasswordField("password", validators=[InputRequired(),
                   EqualTo('confirm', message="Passwords should match")])
 
     image = FileField('profile picture',
@@ -37,12 +36,10 @@ class RegisterForm(FlaskForm):
                                       message='Only supports png,jpg,JPG,PNG')
                       ])
 
-    confirm = PasswordField("Confirm Password")
-
-
+    confirm = PasswordField("confirm password")
 
     #submit button
-    submit = SubmitField("Register")
+    submit = SubmitField("register")
 
 class RestaurantForm(FlaskForm):
     restaurant_name = StringField("restaurant name", validators=[InputRequired()])

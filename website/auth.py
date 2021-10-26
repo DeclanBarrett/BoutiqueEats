@@ -36,7 +36,7 @@ def login(): #view function
             return redirect(nextp)
         else:
             flash(error)
-    return render_template('user.html', form=login_form, heading='Login')
+    return render_template('login.html', login_form=login_form, heading='login')
 
 
 @bp.route("/register", methods=["GET", "POST"])
@@ -70,7 +70,7 @@ def register():
         return redirect(url_for('auth.login'))
     #the else is called when there is a get message
     else:
-        return render_template('user.html', form=register, heading='Register')
+        return render_template('register.html', register=register, heading='register')
 
 @bp.route('/logout')
 @login_required
