@@ -1,8 +1,11 @@
 
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField,SubmitField, StringField, PasswordField, IntegerField, FileField
+from wtforms import Form
+from wtforms.validators import Optional
+from wtforms.fields import TextAreaField,SubmitField, StringField, PasswordField, IntegerField, FileField, FieldList, FormField
 from wtforms.fields.core import RadioField, SelectField
-from wtforms.fields.html5 import URLField, DateTimeLocalField
+from wtforms.fields.html5 import TimeField, URLField, DateTimeLocalField
+from wtforms.fields.simple import HiddenField
 from wtforms.validators import URL, InputRequired, Length, Email, EqualTo, NoneOf, NumberRange, ValidationError
 from flask_wtf.file import FileRequired, FileField, FileAllowed
 from datetime import datetime
@@ -44,6 +47,27 @@ class RegisterForm(FlaskForm):
     #submit button
     submit = SubmitField("Register")
 
+def validate_both_fields(form, field):
+    print("Check 1")
+    for day_tuple in form.opening_hours:
+        print("Check 2: " + day_tuple.start.data.strftime("%H:%M") + " to " + day_tuple.end.data.strftime("%H:%M"))
+        if (day_tuple.start.data and (not day_tuple.end.data)) or (day_tuple.end.data and (not day_tuple.start.data)):
+            print("Valid Both Fields")
+            raise ValidationError("Must have a start and end date, or neither") 
+    
+def validate_enddate_field(form, field):
+    print("Check 3")
+    for day_tuple in form.opening_hours:
+        print("Check 4")
+        if day_tuple.start.data and day_tuple.end.data and (day_tuple.start.data > day_tuple.end.data):
+            print("Valid Endate Fields")
+            raise ValidationError("End date must not be earlier than start date.")   
+
+class DayHoursForm(Form):
+    day = HiddenField()
+    start = TimeField('start', validators=[Optional()])
+    end = TimeField('end', validators=[Optional()])
+
 class RestaurantForm(FlaskForm):
     restaurant_name = StringField("restaurant name", validators=[InputRequired()])
     street = StringField("street", validators=[InputRequired()])
@@ -66,8 +90,10 @@ class RestaurantForm(FlaskForm):
                                       message='Only supports png,jpg,JPG,PNG')
                       ])
     status = RadioField("set status", choices=["upcoming", "inactive", "booked", "cancelled"])
-    submit = SubmitField("post restaurant")
 
+    opening_hours = FieldList(FormField(DayHoursForm), min_entries=7) #validators=[validate_both_fields, validate_enddate_field]
+    
+    submit = SubmitField("post restaurant")
 
 
 class RestaurantStatusForm(FlaskForm):
@@ -85,4 +111,4 @@ class CommentForm(FlaskForm):
     user_rating = IntegerField("rating /5", validators=[InputRequired(), NumberRange(min=0, max=5)])
     submit = SubmitField("post comment")
 
-    
+
