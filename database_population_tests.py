@@ -66,7 +66,7 @@ def add_test_user_rock():
     c =  con.cursor()
     # Adding data
     # user rock
-    c.execute("INSERT INTO users (name, password_hash, email, image) VALUES ('The Rock', 'pbkdf2:sha256:260000$mEKW1cry0XVeR1Ds$db5a0b0c7384ea53abba91afc68eea85ef1559953eac626f383b672d52b5cc48', 'rock@email.com', '/static/image/user_rock.jpg')")
+    c.execute("INSERT INTO users (name, password_hash, email, image) VALUES ('The Rock', 'pbkdf2:sha256:260000$TdryVoMuFR8gp9AV$f13a2891fc083b90d0d6f0a73543c7acfdd914d34a054d60706ca2e4d8877f85', 'rock@email.com', '/static/image/user_rock.jpg')")
     # Applying changes
     con.commit()
 
@@ -89,7 +89,7 @@ def add_test_user_sweeney():
     c =  con.cursor()
     # Adding data
     # user sweeney
-    c.execute("INSERT INTO users (name, password_hash, email, image) VALUES ('Sweeney', 'pbkdf2:sha256:260000$AmJGHN1t0Ilr2CbJ$0ea41ab5706a982858e5d864707be3f318c776989028309a8a9eb9536c7feeb4', 'sweeney@email.com', '/static/image/Sweeney.jpg')")
+    c.execute("INSERT INTO users (name, password_hash, email, image) VALUES ('Sweeney', 'pbkdf2:sha256:260000$AmJGHN1t0Ilr2CbJ$0ea41ab5706a982858e5d864707be3f318c776989028309a8a9eb9536c7feeb4', 'sweeney@email.com', '/static/image/Sweeney.png')")
     # Applying changes
     con.commit()
 
@@ -100,7 +100,7 @@ def add_test_comment_hairy():
     # Getting cursor
     c =  con.cursor() 
     # Adding data
-    #comment on hairy sack
+    # neo comment on hairy sack
     c.execute("INSERT INTO comments (text, post_date, user_rating, user_id, restaurant_id) VALUES ('Best Hairy Sack in the Matrix ooooh god damn i love hair sacks meatballs', '2021-10-25 02:06:30.489405', '5', '1', '1')")
     # Applying changes
     con.commit()
@@ -112,7 +112,7 @@ def add_test_comment_hjs():
     # Getting cursor
     c =  con.cursor() 
     # Adding data
-    #comment on hjs
+    #internette comment on hjs
     c.execute("INSERT INTO comments (text, post_date, user_rating, user_id, restaurant_id) VALUES ('Love this place', '2021-10-26 10:47:35.705792', '5', '2', '2')")
     # Applying changes
     con.commit()
