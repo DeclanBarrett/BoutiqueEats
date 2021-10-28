@@ -1,2 +1,5 @@
 website/sitedata.sqlite
-
+*.pyc
+*.pyo
+*.sqlite
+*.sqlite
