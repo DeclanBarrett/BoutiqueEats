@@ -52,10 +52,11 @@
                 open
             </p>
             <p>
-                <i>thursday - saturday</i>
-                <br>6pm - late
-                <br><br><i>sunday</i>
-                <br>3pm - late
+                {% for open_time in restaurant.opening_hours%}
+                <i>{{ open_time.day_of_the_week }}</i>
+                <br>{{open_time.start_time.strftime("%H:%M %p")}} - {{open_time.end_time.strftime("%H:%M %p")}}
+                <br><br>
+                {% endfor %}
             </p>
 
             <hr class="info-line">

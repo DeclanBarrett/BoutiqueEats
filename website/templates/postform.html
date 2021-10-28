@@ -4,7 +4,7 @@
 
 {% for field, errors in form_restaurant.errors.items() %}
 <div class="alert alert-error">
-    {{ form_restaurant[field].label }}: {{ ', '.join(errors) }}
+    {{ errors }}
 </div>
 {% endfor %}
 
@@ -170,12 +170,16 @@
                         </div>
                     </div>
                 -->
+                {% import 'create_open_hours.html' as create_open_hours %}
+                {{create_open_hours.set_opening_hours(form_restaurant)}}
+
                 <div class="row mt-5 mb-5">
                     <div class="col-lg-4">
                         <!--<button class="btn btn-outline-dark" type="submit">submit post</button>-->
                         {{ form_restaurant.submit (class="btn btn-outline-dark") }}
                     </div>
                 </div>
+
             </form>
         </div>
     </div>

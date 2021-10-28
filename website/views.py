@@ -1,12 +1,15 @@
 from flask import Blueprint, render_template, url_for
 from flask_login.utils import login_required, current_user
+from wtforms import form
 from website.forms import CommentForm, RestaurantForm, ReservationForm
-from website.models import Restaurant, RestaurantStatus, Comment
+from website.models import Restaurant, RestaurantOpeningHours, RestaurantStatus, Comment
 from . import db
 import os
 from werkzeug.utils import redirect, secure_filename
 from website.file_checker import check_upload_file
 from sqlalchemy import desc
+from datetime import time
+from collections import namedtuple
 
 bp = Blueprint('main', __name__)
 
@@ -28,7 +31,23 @@ def bookings():
 @bp.route('/createrestaurant', methods=["GET", "POST"])
 @login_required 
 def createrestaurant():
-    form_restaurant = RestaurantForm()
+
+    dayhours = namedtuple('DayHours', ['day', 'start', 'end'])
+    
+    data = {'opening_hours' : [
+        dayhours("Monday", None, None),
+        dayhours("Tuesday",None, None),
+        dayhours("Wednesday", None, None),
+        dayhours("Thursday", None,None),
+        dayhours("Friday", None, None),
+        dayhours("Saturday", None, None),
+        dayhours("Sunday", None, None),
+    ]
+    }
+
+    print("They were all in it")
+
+    form_restaurant = RestaurantForm(data = data)
     if form_restaurant.validate_on_submit():
         print('form was validated', 'success')
         db_file_path = check_upload_file(form_restaurant)
@@ -43,11 +62,28 @@ def createrestaurant():
                                 num_courses=form_restaurant.num_courses.data,
                                 website=form_restaurant.website.data,
                                 image=db_file_path)
+    
         restaurant_status = RestaurantStatus(status=form_restaurant.status.data,
                                             restaurant=restaurant)
+        
+        print("Got through regular creation")
+        for day_tuple in form_restaurant.opening_hours:
+            print("this is another tuple")
+            if (day_tuple.start.data and day_tuple.end.data):
+                print("Start Data and End Data")
+                restaurant_opening_day = RestaurantOpeningHours(
+                   day_of_the_week = day_tuple.day.data,
+                   start_time = day_tuple.start.data,
+                   end_time = day_tuple.end.data,
+
+                   restaurant = restaurant
+                )
+                db.session.add(restaurant_opening_day)
+
         db.session.add(restaurant)
         db.session.add(restaurant_status)
         db.session.commit()
+        print("Committed new restaurant to the database")
         
         return redirect(url_for('main.index'))
     return render_template("postform.html",form_restaurant=form_restaurant)
