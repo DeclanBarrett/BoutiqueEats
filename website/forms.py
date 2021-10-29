@@ -8,13 +8,15 @@ from wtforms.fields.html5 import TimeField, URLField, DateTimeLocalField
 from wtforms.fields.simple import HiddenField
 from wtforms.validators import URL, InputRequired, Length, Email, EqualTo, NoneOf, NumberRange, ValidationError
 from flask_wtf.file import FileRequired, FileField, FileAllowed
-from datetime import datetime
+from datetime import date
 
 ALLOWED_FILE = {'PNG', 'JPG', 'png', 'jpg'}
 
 def validate_date(form, field):
-        if field.data < datetime.date.today():
-            raise ValidationError("The date cannot be in the past!")
+    print(field.data)
+    if field.data.date() < date.today():
+        raise ValidationError("The date cannot be in the past!")
+    print("Valid Date")
 
 #creates the login information
 class LoginForm(FlaskForm):
@@ -102,8 +104,8 @@ class RestaurantStatusForm(FlaskForm):
 
 class ReservationForm(FlaskForm):
     quantity = IntegerField("quantity", validators=[InputRequired(), NumberRange(min=0)])
-    time = DateTimeLocalField("reservation date", validators=[InputRequired(), validate_date])
-    order = TextAreaField("order", validators=[InputRequired(), Length(max=300)])
+    time = DateTimeLocalField("reservation date", format='%Y-%m-%dT%H:%M', validators=[InputRequired(), validate_date])
+    order = TextAreaField("order", validators=[Length(max=300)])
     submit = SubmitField("reserve")
 
 class CommentForm(FlaskForm):

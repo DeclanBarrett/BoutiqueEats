@@ -2,13 +2,13 @@ from flask import Blueprint, render_template, url_for
 from flask_login.utils import login_required, current_user
 from wtforms import form
 from website.forms import CommentForm, RestaurantForm, ReservationForm
-from website.models import Restaurant, RestaurantOpeningHours, RestaurantStatus, Comment
+from website.models import Reservation, Restaurant, RestaurantOpeningHours, RestaurantStatus, Comment
 from . import db
 import os
 from werkzeug.utils import redirect, secure_filename
 from website.file_checker import check_upload_file
 from sqlalchemy import desc
-from datetime import time
+from datetime import time, date
 from collections import namedtuple
 
 bp = Blueprint('main', __name__)
@@ -25,8 +25,8 @@ def index():
 
 @bp.route('/bookings')
 @login_required
-def bookings():
-    return render_template("bookings.html")
+def bookings(show_modal):
+    return render_template("bookings.html", show_modal)
 
 @bp.route('/createrestaurant', methods=["GET", "POST"])
 @login_required 
@@ -65,7 +65,7 @@ def createrestaurant():
     
         restaurant_status = RestaurantStatus(status=form_restaurant.status.data,
                                             restaurant=restaurant)
-        
+
         print("Got through regular creation")
         for day_tuple in form_restaurant.opening_hours:
             print("this is another tuple")
@@ -95,13 +95,32 @@ def restaurant(id):
     restaurant = Restaurant.query.filter_by(restaurant_id = id).first()
     return render_template("restaurant.html", restaurant=restaurant, comment_form=comment_form, reservation_form=reservation_form)
 
+@restaurant_bp.route('/<restaurant>/reservation', methods=["GET", "POST"])
+def reservation(restaurant):
+    reservation_form = ReservationForm()
+    restaurant_obj = Restaurant.query.filter_by(restaurant_id=restaurant).first()
+    if reservation_form.validate_on_submit():
+        print("reservation valid")
+        reservation = Reservation(
+            quantity = reservation_form.quantity.data,
+            time = reservation_form.time.data,
+            order = reservation_form.order.data,
+            restaurant = restaurant_obj,
+            user = current_user
+        )
+        db.session.add(reservation)
+        db.session.commit()
+        return redirect(url_for("main.bookings"), show_modal=True)
+    print("reservation invalid")
+    
+    return redirect(url_for("restaurants.restaurant", id=restaurant))
+
 @restaurant_bp.route('/<restaurant>/comment', methods=["GET", "POST"])
 def comment(restaurant):
     comment_form = CommentForm()
     restaurant_obj = Restaurant.query.filter_by(restaurant_id=restaurant).first()
-    print("WHO IS THEY")
     if comment_form.validate_on_submit():
-        print("Its validated")
+        print("comment valid")
         comment = Comment(
             text=comment_form.text.data,
             user_rating = comment_form.user_rating.data,
@@ -111,5 +130,6 @@ def comment(restaurant):
 
         db.session.add(comment)
         db.session.commit()
+    print("Should see this after a valid comment")
     return redirect(url_for("restaurants.restaurant", id=restaurant))
 

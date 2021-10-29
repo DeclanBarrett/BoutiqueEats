@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     # relation to call user.comments and comment.created_by
     comments = db.relationship('Comment', backref='user')
     reservations = db.relationship('Reservation', backref='user')
+    restaurants = db.relationship('Restaurant', backref='user')
 
 # Comments on restaurants
 class Comment(db.Model):
@@ -63,6 +64,7 @@ class Restaurant(db.Model):
     statuses = db.relationship('RestaurantStatus', backref='restaurant')
     opening_hours = db.relationship('RestaurantOpeningHours', backref='restaurant')
     reservations = db.relationship('Reservation', backref='restaurant')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):  #string print method
         return "<Name: {}>".format(self.name)
