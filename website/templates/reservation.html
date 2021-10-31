@@ -1,5 +1,9 @@
 {% macro reservation_creation(restaurant, reservation_form) -%}
 <div class="col-lg-8 col-sm-6 btn-align mt-1">
+    Hey
+    {% if reservation_form.errors %}
+    {{ reservation_form.errors }}
+    {% endif %}
     <button type="button" class="btn btn-dark modalBtn" data-bs-toggle="modal" data-bs-target="#bookingModal">
         reserve a table now
     </button>
@@ -12,6 +16,7 @@
             <div class="modal-content">
                 <form method="post"
                     action="{{url_for('restaurants.reservation', restaurant=restaurant.restaurant_id)}}">
+                    {{ reservation_form.csrf_token }}
                     <div class="modal-header text-center">
                         <h5 class="modal-title w-100" id="bookingHeader">make a reservation</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

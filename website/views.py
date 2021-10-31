@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for
+from flask import Blueprint, render_template, url_for, request
 from flask_login.utils import login_required, current_user
 from wtforms import form
 from website.forms import CommentForm, RestaurantForm, ReservationForm
@@ -25,8 +25,9 @@ def index():
 
 @bp.route('/bookings')
 @login_required
-def bookings(show_modal):
-    return render_template("bookings.html", show_modal)
+def bookings():
+    bookings = Reservation.query.filter_by(user=current_user).all()
+    return render_template("bookings.html", show_modal=request.args.get('show_modal'), bookings = bookings)
 
 @bp.route('/createrestaurant', methods=["GET", "POST"])
 @login_required 
@@ -103,14 +104,14 @@ def reservation(restaurant):
         print("reservation valid")
         reservation = Reservation(
             quantity = reservation_form.quantity.data,
-            time = reservation_form.time.data,
+            reservation_time = reservation_form.time.data,
             order = reservation_form.order.data,
             restaurant = restaurant_obj,
             user = current_user
         )
         db.session.add(reservation)
         db.session.commit()
-        return redirect(url_for("main.bookings"), show_modal=True)
+        return redirect(url_for("main.bookings", show_modal=True))
     print("reservation invalid")
     
     return redirect(url_for("restaurants.restaurant", id=restaurant))

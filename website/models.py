@@ -98,7 +98,8 @@ class Reservation(db.Model):
 
     reservation_id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
-    time = db.Column(db.DateTime, default=datetime.now())
+    reservation_time = db.Column(db.DateTime, default=datetime.now())
+    reservation_created = db.Column(db.DateTime, default=datetime.now())
 
     order = db.Column(db.String(300))
 
