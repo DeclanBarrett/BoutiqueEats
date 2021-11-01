@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, request
 from flask_login.utils import login_required, current_user
 from wtforms import form
-from website.forms import CommentForm, RestaurantForm, ReservationForm
+from website.forms import CommentForm, FilterRestaurantsForm, RestaurantForm, ReservationForm
 from website.models import Reservation, Restaurant, RestaurantOpeningHours, RestaurantStatus, Comment
 from . import db
 import os
@@ -17,11 +17,51 @@ restaurant_bp = Blueprint('restaurants', __name__, url_prefix="/restaurants" )
 
 @bp.route('/')
 def index():
+    filtered_form = FilterRestaurantsForm()
     restaurants = Restaurant.query.all()
     statuses = []
     for restaurant in restaurants:
         statuses.append(RestaurantStatus.query.filter_by(restaurant=restaurant).order_by(desc(RestaurantStatus.at_time)).first())
-    return render_template("index.html", restaurants=restaurants, restaurant_statuses=statuses)
+    return render_template("index.html", restaurants=restaurants, restaurant_statuses=statuses, filter_form = filtered_form)
+
+@bp.route('/filters', methods=["GET", "POST"])
+def filtered_index():
+    filter_form = FilterRestaurantsForm()
+    if filter_form.validate_on_submit():
+        
+        name = filter_form.name.data
+        cuisine = filter_form.cuisine_type.data
+        num_courses = filter_form.courses.data 
+
+        initial_restaurants = Restaurant.query.filter(
+            Restaurant.name.like("%" + name + "%"),
+            Restaurant.cuisine_type.like("%" + cuisine + "%"),
+            Restaurant.price >= filter_form.minimum_price.data,
+            Restaurant.price <= filter_form.maximum_price.data,
+            Restaurant.num_courses >= num_courses
+        ).all()
+
+        restaurants = []
+        for restaurant in initial_restaurants:
+            rating = 3.0
+            average = []
+            for comment in restaurant.comments:
+                average.append(comment.user_rating)
+            if (len(average) > 0):
+                rating = sum(average) / len(average)
+            if (rating >= float(filter_form.rating.data)):
+                restaurants.append(restaurant)
+                
+    else:
+        print("invalid filtering")
+        restaurants = Restaurant.query.all()
+    for fieldName, errorMessages in filter_form.errors.items():
+        for err in errorMessages:
+            print(err)
+    statuses = []
+    for restaurant in restaurants:
+        statuses.append(RestaurantStatus.query.filter_by(restaurant=restaurant).order_by(desc(RestaurantStatus.at_time)).first())
+    return render_template("index.html", restaurants=restaurants, restaurant_statuses=statuses, filter_form = filter_form)
 
 @bp.route('/bookings')
 @login_required

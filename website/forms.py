@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import Form
 from wtforms.validators import Optional
 from wtforms.fields import TextAreaField,SubmitField, StringField, PasswordField, IntegerField, FileField, FieldList, FormField
-from wtforms.fields.core import RadioField, SelectField
+from wtforms.fields.core import BooleanField, RadioField, SelectField
 from wtforms.fields.html5 import TimeField, URLField, DateTimeLocalField
 from wtforms.fields.simple import HiddenField
 from wtforms.validators import URL, InputRequired, Length, Email, EqualTo, NoneOf, NumberRange, ValidationError
@@ -112,5 +112,16 @@ class CommentForm(FlaskForm):
     text = TextAreaField("comment", validators=[InputRequired(), Length(max=400)])
     user_rating = IntegerField("rating /5", validators=[InputRequired(), NumberRange(min=0, max=5)])
     submit = SubmitField("post comment")
+
+class FilterRestaurantsForm(FlaskForm):
+    name = StringField("restaurant name", default="", validators=[Optional()])
+    cuisine_type = SelectField("cuisine type", choices=[("", "all"), ("modern australian", "modern australian"),("contemporary","contemporary"),
+    ("french","french"),("italian","italian"),("japanese","japanese"),("middle eastern", "middle eastern"),("mediterranean","mediterranean"),
+    ("asian", "asian"),("european","european")], validators=[Optional()])
+    rating = RadioField("ratings", choices=[(0, "Any"),(3,"3+"),(4,"4+"),(4.5,"4.5+")], default=0, validators=[Optional()])
+    minimum_price = IntegerField("minimum price", default=0, validators=[Optional()])
+    maximum_price = IntegerField("maximum price", default=1000, validators=[Optional()])
+    courses = IntegerField("courses", default=0, validators=[Optional()])
+    submit = SubmitField("submit")
 
 

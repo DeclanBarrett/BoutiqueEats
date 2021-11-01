@@ -16,14 +16,14 @@
 
 <div class="container">
     <div class="row mt-4 mb-2">
-        <div class="col-12 col-md-6 col-lg-6">
-            <button class="btn btn-outline-dark px-3" type="button" data-bs-toggle="collapse"
+        <div class="col-6">
+            <button class="btn btn-outline-dark dropdown-toggle px-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#filterMenu" aria-expanded="false" aria-controls="filterMenu">
-                Filters
+                filters
             </button>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-6">
+        <div class="col-6">
             <a class="btn btn-outline-dark float-end" href="{{url_for('main.createrestaurant')}}" role="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus"
                     viewBox="0 0 16 16">
@@ -36,139 +36,77 @@
     </div>
 
     <div class="collapse" id="filterMenu">
-        <div class="row mt-3">
-            <div class="dropdown">
-                <button class="btn btn-outline-dark dropdown-toggle me-1" type="button" id="cuisineDropDownButton"
-                    data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                    cuisines
-                </button>
-
-                <ul class="dropdown-menu" aria-labelledby="cuisineDropDownButton">
-                    <li><a class="dropdown-item" href="#">modern australian</a></li>
-                    <li><a class="dropdown-item" href="#">contemporary</a></li>
-                    <li><a class="dropdown-item" href="#">french</a></li>
-                    <li><a class="dropdown-item" href="#">italian</a></li>
-                    <li><a class="dropdown-item" href="#">japanese</a></li>
-                </ul>
+        <form method="post" action="{{url_for('main.filtered_index')}}">
+            {{ filter_form.csrf_token }}
+            <div class="row mt-3">
+                <div class="col-5 col-lg-2 col-md-3">
+                    {{ filter_form.name (class="form-control", placeholder="restaurant name")}}
+                </div>
             </div>
-        </div>
 
-        <div class="row mt-2">
-            <div class="dropdown">
+            <div class="row mt-2">
+                <div class="col-5 col-lg-2 col-md-3">
+                    {{ filter_form.cuisine_type (class="form-select") }}
+                </div>
+            </div>
 
-                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="ratingDropDownButton"
-                    data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                    rating
-                </button>
+            <div class="row mt-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark dropdown-toggle" type="button" id="ratingDropDownButton"
+                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                        rating
+                    </button>
 
-                <div class="dropdown-menu" aria-labelledby="ratingDropDownButton">
-                    <div class="form-check ms-2">
-                        <input class="form-check-input" type="checkbox" id="AnyCheckBtn">
-                        <label class="form-check-label" for="AnyCheckBtn">
-                            Any
-                        </label>
-                    </div>
-                    <div class="form-check ms-2">
-                        <input class="form-check-input" type="checkbox" value="" id="3+Btn">
-                        <label class="form-check-label" for="3+Btn">
-                            3+
-                        </label>
-                    </div>
-                    <div class="form-check ms-2">
-                        <input class="form-check-input" type="checkbox" value="" id="4+Btn">
-                        <label class="form-check-label" for="4+Btn">
-                            4+
-                        </label>
+                    <div class="dropdown-menu" aria-labelledby="ratingDropDownButton">
+                        {% for subfield in filter_form.rating %}
+                        <div class="form-check">
+                            {{ subfield }}
+                            {{ subfield.label }}
+                        </div>
+                        {% endfor %}
                     </div>
 
-                    <div class="form-check ms-2">
-                        <input class="form-check-input" type="checkbox" value="" id="4.5+Btn">
-                        <label class="form-check-label" for="4.5+Btn">
-                            4.5+
-                        </label>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark dropdown-toggle" type="button" id="priceDropDownButton"
+                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                        price
+                    </button>
+
+                    <div class="dropdown-menu" aria-labelledby="priceDropDownButton">
+                        <div class="input-group px-5">
+                            <span class="input-group-text">min $</span>
+                            {{ filter_form.minimum_price (class="form-control", placeholder=0) }}
+                            <span class="input-group-text">max $</span>
+                            {{ filter_form.maximum_price (class="form-control", placeholder=1000) }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row mt-2">
-            <div class="dropdown">
-                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="priceDropDownButton"
-                    data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                    price
-                </button>
-
-                <div class="dropdown-menu" aria-labelledby="priceDropDownButton">
-                    <div class="input-group px-5">
-                        <span class="input-group-text">$</span>
-                        <input type="text" class="form-control" placeholder="min" aria-label="min">
-                        <span class="input-group-text">to</span>
-                        <input type="text" class="form-control" placeholder="max" aria-label="max">
-                    </div>
+            <div class="row mt-2">
+                <div class="col-5 col-lg-2 col-md-3">
+                    {{ filter_form.courses (class="form-control", placeholder="num courses")}}
                 </div>
             </div>
-        </div>
 
-        <div class="row mt-2">
-            <div class="col-5 col-lg-2 col-md-3">
-                <input id="courseSelect" class="form-control" type="number" min="1" max="20" placeholder="courses">
+            <div class="row mt-2">
+                <div class="col-5 col-lg-2 col-md-3">
+                    {{ filter_form.submit (class="btn btn-outline-dark")}}
+                </div>
+
             </div>
-        </div>
+        </form>
     </div>
+</div>
 
 </div>
 
 <div class="container">
     <div class="row mt-3 mt-lg-4 mt-sm-4">
-        <div class="col-lg-4 col-md-12 pb-5 pb-lg-2 pb-md-5 pb-sm-4">
-            <div class="card">
-
-                <img src="../static/image/elska_2.png" class="card-img-top px-2 pt-2" alt="...">
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6 col-lg-8 col-md-6">
-                            <div class="card-title">
-                                <h5>(PLACEHOLDER) ELSKA</h5>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-lg-4 col-md-6">
-                            <span class="badge rounded-pill bg-success float-end">4.7&#9733;</span>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-8 col-lg-6">
-                            <p class="card-text card-cuisine">
-                                modern australian
-                            </p>
-                        </div>
-
-                        <div class="col-4 col-lg-6 card-price">
-                            $135 pp.
-                        </div>
-                    </div>
-
-                    <div class="row mt-1">
-                        <div class="card-text card-location">
-                            new farm
-                        </div>
-                    </div>
-
-                    <div class="row mt-1">
-                        <div class="card-text card-seats">
-                            one table left: tues, 16 october
-                        </div>
-                    </div>
-
-
-                    <a href="{{url_for('restaurants.restaurant', id=1)}}" class="stretched-link"></a>
-                </div>
-            </div>
-        </div>
-
         <!-- A real filled in card - the above one is a holder till the create restaurant is built -->
         {% for restaurant in restaurants %}
         <div class="col-lg-4 col-md-12 pb-5 pb-lg-2 pb-md-5 pb-sm-4">
