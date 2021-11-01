@@ -136,7 +136,9 @@ def restaurant(id):
     restaurant = Restaurant.query.filter_by(restaurant_id = id).first()
     return render_template("restaurant.html", restaurant=restaurant, comment_form=comment_form, reservation_form=reservation_form)
 
+
 @restaurant_bp.route('/<restaurant>/reservation', methods=["GET", "POST"])
+@login_required
 def reservation(restaurant):
     reservation_form = ReservationForm()
     restaurant_obj = Restaurant.query.filter_by(restaurant_id=restaurant).first()
@@ -162,8 +164,7 @@ def reservation(restaurant):
             db.session.commit()
             return redirect(url_for("main.bookings", show_modal=True))
         
-        flash("Booking was outside of opening hours!")
-    print("reservation invalid")
+        flash("Booking was outside of opening hours!", 'danger')
     
     return redirect(url_for("restaurants.restaurant", id=restaurant))
 
