@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request
+from flask import Blueprint, render_template, url_for, request, flash
 from flask_login.utils import login_required, current_user
 from wtforms import form
 from website.forms import CommentForm, FilterRestaurantsForm, RestaurantForm, ReservationForm
@@ -149,9 +149,20 @@ def reservation(restaurant):
             restaurant = restaurant_obj,
             user = current_user
         )
-        db.session.add(reservation)
-        db.session.commit()
-        return redirect(url_for("main.bookings", show_modal=True))
+
+        should_commit = False
+                
+        for day_tuple in restaurant_obj.opening_hours:
+            if (day_tuple.day_of_the_week.lower() == reservation_form.time.data.strftime("%A").lower()):
+                if (day_tuple.start_time <= reservation_form.time.data.time() and day_tuple.end_time >= reservation_form.time.data.time()):
+                    should_commit = True
+
+        if (should_commit):
+            db.session.add(reservation)
+            db.session.commit()
+            return redirect(url_for("main.bookings", show_modal=True))
+        
+        flash("Booking was outside of opening hours!")
     print("reservation invalid")
     
     return redirect(url_for("restaurants.restaurant", id=restaurant))
