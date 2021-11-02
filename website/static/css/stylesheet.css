@@ -93,6 +93,9 @@ body {
 .hero {
     background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('img/banner_many.jpg');
 }
+h4.login{
+    font-size:40px;
+}
 
 .info-align {
     text-align: right;
@@ -140,6 +143,9 @@ p.seat-alert {
     color: darkred;
     margin-top: 5px;
 }
+p.new-user{
+    font-size: 20px;
+}
 
 .rating {
     text-align: left;
@@ -186,6 +192,7 @@ span.badge {
     
     transition: ease-out 0.3s;
     font-size: 20px;
+    font-weight:bold;
     outline: none;
     border: 1px solid black;
     position: relative;

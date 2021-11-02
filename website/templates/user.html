@@ -3,7 +3,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 <div class="page-header col-md-1 m-auto">
-    <h4>{{heading}}</h4>
+    <h4 class=login>{{heading}}</h4>
 </div>
 
 <!-- Form rendering is simple and easy if using bootstrap col-xl-4 col-md-6 m-auto-->
@@ -14,7 +14,7 @@
 <!-- When you have login form, then do show the user a link to register -->
 {% if heading|lower =='login' %}
 <div class="col-md-2 m-auto">
-    <p>New user? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
+    <p class=new-user>New user? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
 </div>
 {% endif %}
 
