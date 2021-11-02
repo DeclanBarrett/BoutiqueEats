@@ -18,7 +18,6 @@ class User(db.Model, UserMixin):
     # relation to call user.comments and comment.created_by
     comments = db.relationship('Comment', backref='user')
     reservations = db.relationship('Reservation', backref='user')
-    restaurants = db.relationship('Restaurant', backref='user')
 
 # Comments on restaurants
 class Comment(db.Model):
@@ -62,23 +61,10 @@ class Restaurant(db.Model):
     # relation to call destination.comments and comment.destination
     comments = db.relationship('Comment', backref='restaurant')
     statuses = db.relationship('RestaurantStatus', backref='restaurant')
-    opening_hours = db.relationship('RestaurantOpeningHours', backref='restaurant')
     reservations = db.relationship('Reservation', backref='restaurant')
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):  #string print method
         return "<Name: {}>".format(self.name)
-
-class RestaurantOpeningHours(db.Model):
-    __tablename__ = 'restaurantopeninghours'
-    __table_args__ = {'extend_existing': True}
-
-    restaurant_opening_hours_id = db.Column(db.Integer, primary_key=True)
-    day_of_the_week = db.Column(db.String, nullable=False)
-    start_time = db.Column(db.Time, nullable=False)
-    end_time = db.Column(db.Time, nullable=False)
-
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.restaurant_id'))
 
 # Restaurants to visit
 class RestaurantStatus(db.Model):
@@ -98,10 +84,9 @@ class Reservation(db.Model):
 
     reservation_id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
-    reservation_time = db.Column(db.DateTime, default=datetime.now())
-    reservation_created = db.Column(db.DateTime, default=datetime.now())
+    time = db.Column(db.DateTime, default=datetime.now())
 
-    order = db.Column(db.String(300))
+    user_order = db.Column(db.String(300))
 
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.restaurant_id'))
     id = db.Column(db.Integer, db.ForeignKey('users.id'))
