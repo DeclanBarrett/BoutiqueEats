@@ -91,7 +91,7 @@ class RestaurantForm(FlaskForm):
                           FileAllowed(ALLOWED_FILE,
                                       message='Only supports png,jpg,JPG,PNG')
                       ])
-    status = RadioField("set status", choices=["upcoming", "inactive", "booked", "cancelled"])
+    status = RadioField("set status", choices=[("upcoming", "upcoming"), ("inactive", "inactive"), ("booked","booked"), ("cancelled", "cancelled")])
 
     opening_hours = FieldList(FormField(DayHoursForm), min_entries=7) #validators=[validate_both_fields, validate_enddate_field]
     
