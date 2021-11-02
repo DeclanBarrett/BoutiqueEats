@@ -178,18 +178,18 @@ span.badge {
     padding: 0 10px;
 }
 .user-container form .btn{
-    width: 130px;
+    width: 380px;
     height: 40px;
     border:none;
     color: black;
     border-radius: 4px;
-    margin-left: 50%;
+    
     transition: ease-out 0.3s;
     font-size: 20px;
     outline: none;
     border: 1px solid black;
     position: relative;
-    transform: translateX(-60%);
+    
     background-color: white;
     box-shadow: inset 0 0 0 0 black;
     
@@ -197,7 +197,7 @@ span.badge {
 
 }
 .user-container form .btn:hover{
-    box-shadow: inset 130px 0 0 0 black;
+    box-shadow: inset 380px 0 0 0 black;
     color: white;
 
 }
