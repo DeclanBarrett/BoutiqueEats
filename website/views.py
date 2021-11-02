@@ -15,14 +15,21 @@ bp = Blueprint('main', __name__)
 
 restaurant_bp = Blueprint('restaurants', __name__, url_prefix="/restaurants" )
 
+def restaurant_space(restaurant, space_on_date):
+    current_booking_quantity = 0
+    for reservation in restaurant.reservations:
+        if (reservation.reservation_time.date() == space_on_date):
+            current_booking_quantity += reservation.quantity
+    return restaurant.max_reservations - current_booking_quantity
+
 @bp.route('/')
 def index():
     filtered_form = FilterRestaurantsForm()
     restaurants = Restaurant.query.all()
-    statuses = []
+    booking_space = []
     for restaurant in restaurants:
-        statuses.append(RestaurantStatus.query.filter_by(restaurant=restaurant).order_by(desc(RestaurantStatus.at_time)).first())
-    return render_template("index.html", restaurants=restaurants, restaurant_statuses=statuses, filter_form = filtered_form)
+        booking_space.append(restaurant_space(restaurant, date.today()))
+    return render_template("index.html", restaurants=restaurants, filter_form = filtered_form, booking_space = booking_space)
 
 @bp.route('/filters', methods=["GET", "POST"])
 def filtered_index():
@@ -58,10 +65,10 @@ def filtered_index():
     for fieldName, errorMessages in filter_form.errors.items():
         for err in errorMessages:
             print(err)
-    statuses = []
+    booking_space = []
     for restaurant in restaurants:
-        statuses.append(RestaurantStatus.query.filter_by(restaurant=restaurant).order_by(desc(RestaurantStatus.at_time)).first())
-    return render_template("index.html", restaurants=restaurants, restaurant_statuses=statuses, filter_form = filter_form)
+        booking_space.append(restaurant_space(restaurant, date.today()))
+    return render_template("index.html", restaurants=restaurants, filter_form = filter_form, booking_space = booking_space)
 
 @bp.route('/bookings')
 @login_required
@@ -143,7 +150,40 @@ def reservation(restaurant):
     reservation_form = ReservationForm()
     restaurant_obj = Restaurant.query.filter_by(restaurant_id=restaurant).first()
     if reservation_form.validate_on_submit():
-        print("reservation valid")
+        
+        #checking whether the reservation is within opening hours
+        should_commit = False 
+        for day_tuple in restaurant_obj.opening_hours:
+            if (day_tuple.day_of_the_week.lower() == reservation_form.time.data.strftime("%A").lower()):
+                if (day_tuple.start_time <= reservation_form.time.data.time() and day_tuple.end_time >= reservation_form.time.data.time()):
+                    should_commit = True
+        #checking the current status on the day
+        appropriate_status = False
+        statuses = []
+        for status in restaurant_obj.statuses:
+            if status.at_time.date() == reservation_form.time.data.date():
+                statuses.append(status)
+
+        current_status = "unavailable"
+        if (len(statuses) > 0):
+            current_status = statuses[0].status
+            if (statuses[0].status == "upcoming"):
+                appropriate_status = True
+        else:
+            appropriate_status = True
+
+        enough_space = False
+        if (restaurant_space(restaurant_obj, reservation_form.time.data.date()) - reservation_form.quantity.data >= 0):
+            enough_space = True
+
+        if (restaurant_space(restaurant_obj, reservation_form.time.data.date()) - reservation_form.quantity.data <= 0):
+            restaurant_status = RestaurantStatus(status="booked",
+                                                restaurant=restaurant_obj)
+        else:
+            restaurant_status = RestaurantStatus(status="upcoming",
+                                                restaurant=restaurant_obj)
+            
+
         reservation = Reservation(
             quantity = reservation_form.quantity.data,
             reservation_time = reservation_form.time.data,
@@ -152,19 +192,15 @@ def reservation(restaurant):
             user = current_user
         )
 
-        should_commit = False
-                
-        for day_tuple in restaurant_obj.opening_hours:
-            if (day_tuple.day_of_the_week.lower() == reservation_form.time.data.strftime("%A").lower()):
-                if (day_tuple.start_time <= reservation_form.time.data.time() and day_tuple.end_time >= reservation_form.time.data.time()):
-                    should_commit = True
-
-        if (should_commit):
+        if (should_commit and appropriate_status and enough_space):
             db.session.add(reservation)
+            db.session.add(restaurant_status)
             db.session.commit()
             return redirect(url_for("main.bookings", show_modal=True))
-        
-        flash("Booking was outside of opening hours!", 'danger')
+        elif (should_commit == False):
+            flash("Reservation is outside of opening hours", 'warning')
+        elif (appropriate_status == False):
+            flash("Reservation at " + restaurant_obj.name + " cannot be created since the restaurant is " + current_status, 'warning')
     
     return redirect(url_for("restaurants.restaurant", id=restaurant))
 
@@ -185,4 +221,3 @@ def comment(restaurant):
         db.session.commit()
     print("Should see this after a valid comment")
     return redirect(url_for("restaurants.restaurant", id=restaurant))
-

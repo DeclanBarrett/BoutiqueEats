@@ -160,7 +160,11 @@
                         <div class="card-text card-seats">
 
                             <!--one table left: tues, 16 october (PLACEHOLDER)-->
-                            {{ restaurant.max_reservations - restaurant.reservations|length }} tables left:
+                            {% if restaurant.statuses[-1].status == "upcoming" %}
+                            {{ booking_space[loop.index - 1] }} tables left:
+                            {% else %}
+                            {{ restaurant.statuses[-1].status }}:
+                            {% endif %}
                             {{restaurant.statuses[-1].at_time.strftime("%a, %d %B").lower() }}
                         </div>
                     </div>
