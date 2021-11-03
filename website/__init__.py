@@ -44,7 +44,8 @@ def create_app():
     app.register_blueprint(auth.bp)
     app.register_blueprint(views.bp)
     app.register_blueprint(views.restaurant_bp)
-    
+    app.register_blueprint(views.user_bp)
+    app.register_blueprint(views.error_bp)
     return app
 
 

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+
+<div class="container">
+    <div class="row mt-4 mb-1">
+        <h3>
+            Restaurants you created
+        </h3>
+    </div>
+
+    <div class="container">
+        {% for restaurant in restaurants %}
+        <div class="row mt-3">
+            <div class="col col-sm-8 col-md-12 col-lg-8 col-xl-6 booking-card position-relative">
+
+                <img src="{{ restaurant.image }}" class="card-img-top px-2 pt-2" alt="{{ restaurant.name }}">
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 col-lg-8 col-md-6">
+                            <div class="card-title">
+                                <h5>{{ restaurant.name }} </h5>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-lg-4 col-md-6">
+                            {% set average = [] %}
+                            {% for comment in restaurant.comments %}
+                            {% if average.append(comment.user_rating) %} {% endif %}
+                            {% endfor %}
+                            <span class="badge rounded-pill bg-success float-end">
+                                {% if average|count > 0 %}
+                                {{ average | sum / average | count}}
+                                {% else %}
+                                new
+                                {% endif %}
+                                &#9733;</span>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8 col-lg-6">
+                            <p class="card-text card-cuisine">
+                                {{ restaurant.cuisine_type }}
+                            </p>
+                        </div>
+
+                        <div class="col-4 col-lg-6 card-price">
+                            ${{ restaurant.price }} pp.
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="card-text card-location">
+                            {{ restaurant.suburb }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="card-text card-seats">
+                            {% if restaurant.statuses[-1].status == "upcoming" %}
+                            {% if is_open_today[loop.index - 1] %}
+                            {{ booking_space[loop.index - 1] }} tables left:
+                            {% else %}
+                            {{ restaurant.statuses[-1].status }}:
+                            {% endif %}
+                            {% else %}
+                            {{ restaurant.statuses[-1].status }}:
+                            {% endif %}
+                            {{restaurant.statuses[-1].at_time.strftime("%a, %d %B").lower() }}
+
+                        </div>
+                    </div>
+
+
+                    <a href="{{url_for('restaurants.restaurant', id=restaurant.restaurant_id)}}"
+                        class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% if show_modal %}
+<script>
+    $(document).ready(function () {
+        $('#confirmationModal').modal('show');
+    });
+</script>
+{% endif %}
+
+
+{% endblock %}

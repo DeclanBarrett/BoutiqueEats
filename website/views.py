@@ -15,6 +15,10 @@ bp = Blueprint('main', __name__)
 
 restaurant_bp = Blueprint('restaurants', __name__, url_prefix="/restaurants" )
 
+user_bp = Blueprint('users', __name__, url_prefix="/users" )
+
+error_bp = Blueprint('errors', __name__)
+
 #check restaurant space on day
 def restaurant_space(restaurant, space_on_date):
     current_booking_quantity = 0
@@ -122,9 +126,6 @@ def createrestaurant():
         dayhours("Sunday", None, None),
     ]
     }
-
-    print("They were all in it")
-
     form_restaurant = RestaurantForm(data = data)
     if form_restaurant.validate_on_submit():
         print('form was validated', 'success')
@@ -139,16 +140,14 @@ def createrestaurant():
                                 max_reservations=form_restaurant.max_num_reservations.data,
                                 num_courses=form_restaurant.num_courses.data,
                                 website=form_restaurant.website.data,
-                                image=db_file_path)
+                                image=db_file_path,
+                                user=current_user)
     
         restaurant_status = RestaurantStatus(status=form_restaurant.status.data,
                                             restaurant=restaurant)
 
-        print("Got through regular creation")
         for day_tuple in form_restaurant.opening_hours:
-            print("this is another tuple")
             if (day_tuple.start.data and day_tuple.end.data):
-                print("Start Data and End Data")
                 restaurant_opening_day = RestaurantOpeningHours(
                    day_of_the_week = day_tuple.day.data,
                    start_time = day_tuple.start.data,
@@ -161,10 +160,11 @@ def createrestaurant():
         db.session.add(restaurant)
         db.session.add(restaurant_status)
         db.session.commit()
-        print("Committed new restaurant to the database")
+        flash("Successfully created " + restaurant.name, 'success')
         
         return redirect(url_for('main.index'))
     return render_template("postform.html",form_restaurant=form_restaurant)
+
 
 @restaurant_bp.route('/<id>')
 def restaurant(id):
@@ -173,7 +173,6 @@ def restaurant(id):
     restaurant = Restaurant.query.filter_by(restaurant_id = id).first()
     space = restaurant_space(restaurant, date.today())
     return render_template("restaurant.html", restaurant=restaurant, comment_form=comment_form, reservation_form=reservation_form, space=space, open_today = check_open_today(restaurant, date.today()))
-
 
 @restaurant_bp.route('/<restaurant>/reservation', methods=["GET", "POST"])
 @login_required
@@ -200,7 +199,7 @@ def reservation(restaurant):
         elif (restaurant_obj.statuses[-1].status != "inactive"):
             appropriate_status = True
         else:
-            current_status = statuses[-1].status
+            current_status = restaurant_obj.statuses[-1].status
         
         enough_space = False
         if (restaurant_space(restaurant_obj, reservation_form.time.data.date()) - reservation_form.quantity.data >= 0):
@@ -228,9 +227,13 @@ def reservation(restaurant):
             db.session.commit()
             return redirect(url_for("main.bookings", show_modal=True))
         elif (should_commit == False):
-            flash("Reservation is outside of opening hours", 'warning')
+            flash("Reservation is outside of opening hours", 'danger')
         elif (appropriate_status == False):
-            flash("Reservation at " + restaurant_obj.name + " cannot be created since the restaurant is " + current_status, 'warning')
+            if current_status == "booked":
+                current_status = "booked out"
+            flash("Reservation at " + restaurant_obj.name + " cannot be created since the restaurant is " + current_status, 'danger')
+        elif (enough_space == False):
+            flash("Reservation at " + restaurant_obj.name + " cannot be created since the restaurant does not have enough spaces left", 'danger')
     
     return redirect(url_for("restaurants.restaurant", id=restaurant))
 
@@ -250,3 +253,26 @@ def comment(restaurant):
         db.session.commit()
         flash("Your comment has been posted", 'success')
     return redirect(url_for("restaurants.restaurant", id=restaurant))
+
+@user_bp.route('/restaurants')
+@login_required
+def users_restaurants():
+    restaurants = Restaurant.query.filter_by(user=current_user).all()
+    booking_space = []
+    is_open_today = []
+    for restaurant in restaurants:
+        set_todays_status(restaurant)
+        booking_space.append(restaurant_space(restaurant, date.today()))
+        is_open_today.append(check_open_today(restaurant, date.today()))
+    return render_template("users_restaurants.html", restaurants=restaurants, booking_space = booking_space, today=date.today(), is_open_today = is_open_today)
+
+#error handlers
+@error_bp.app_errorhandler(404)
+def page_not_found(e):
+    flash("Page is not available", 'danger')
+    return redirect(url_for("main.index"))
+
+@error_bp.app_errorhandler(500)
+def internal_server_error(e):
+    flash("Internal Server Error " + e + " Please use other parts of our site in the meanwhile", 'danger')
+    return render_template("base.html")

@@ -18,7 +18,7 @@
     <div class="container">
         {% for booking in bookings %}
         <div class="row mt-3">
-            <div class="col col-sm-8 col-md-12 col-lg-8 col-xl-6 booking-card">
+            <div class="col col-sm-8 col-md-12 col-lg-8 col-xl-6 booking-card position-relative">
                 <div class="shadow p-3 mb-5 bg-white rounded">
                     <div class="row">
                         <img src="{{ booking.restaurant.image }}" class="img-fluid booking-img"
@@ -77,8 +77,11 @@
                         <div class="col col-lg-6">
                             <h6>booked on {{ booking.reservation_created.strftime("%A, %d %b.") }}</h6>
                             <h6>order id: #{{ booking.reservation_id }}</h6>
+                            <h6>restaurant id: #{{ booking.restaurant_id }}</h6>
                         </div>
                     </div>
+                    <a href="{{url_for('restaurants.restaurant', id=booking.restaurant_id)}}"
+                        class="stretched-link"></a>
                 </div>
             </div>
         </div>

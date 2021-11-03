@@ -36,12 +36,14 @@
                 {% if (restaurant.statuses[-1].status == "upcoming") and open_today %}
                 {{ space }} tables left
                 {% else %}
+                {% if restaurant.statuses[-1].status == "booked" %}
+                booked out
+                {% else %}
                 {{ restaurant.statuses[-1].status }}
+                {% endif %}
                 {% endif %}
             </p>
         </div>
-
-
 
     </div>
 

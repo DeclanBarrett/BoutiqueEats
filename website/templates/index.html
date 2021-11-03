@@ -165,7 +165,11 @@
                             {{ restaurant.statuses[-1].status }}:
                             {% endif %}
                             {% else %}
+                            {% if restaurant.statuses[-1].status == "booked" %}
+                            booked out:
+                            {% else %}
                             {{ restaurant.statuses[-1].status }}:
+                            {% endif %}
                             {% endif %}
                             {{restaurant.statuses[-1].at_time.strftime("%a, %d %B").lower() }}
 

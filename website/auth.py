@@ -35,7 +35,7 @@ def login(): #view function
                 return redirect(url_for('main.index'))
             return redirect(nextp)
         else:
-            flash(error)
+            flash(error, 'danger')
     return render_template('user.html', form=login_form, heading='Login')
 
 
@@ -53,7 +53,7 @@ def register():
         
         u1 = User.query.filter_by(name=uname).first()
         if u1:
-            flash('User name already exists, please login')
+            flash('User name already exists, please login', 'danger')
             return redirect(url_for('auth.login'))
         # don't store the password - create password hash
         pwd_hash = generate_password_hash(pwd)
@@ -76,5 +76,5 @@ def register():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out')
+    flash('You have been logged out', 'info')
     return redirect(url_for('auth.login'))
