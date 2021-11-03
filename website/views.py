@@ -23,7 +23,7 @@ def restaurant_space(restaurant, space_on_date):
             current_booking_quantity += reservation.quantity
     return restaurant.max_reservations - current_booking_quantity
 
-#update todays staus if not already updated
+#update todays status if not already updated
 def set_todays_status(restaurant):
     if restaurant.statuses[-1].status != "inactive":
         if restaurant.statuses[-1].at_time.date() != date.today():
