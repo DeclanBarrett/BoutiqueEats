@@ -118,7 +118,7 @@ class FilterRestaurantsForm(FlaskForm):
     cuisine_type = SelectField("cuisine type", choices=[("", "all"), ("modern australian", "modern australian"),("contemporary","contemporary"),
     ("french","french"),("italian","italian"),("japanese","japanese"),("middle eastern", "middle eastern"),("mediterranean","mediterranean"),
     ("asian", "asian"),("european","european")], validators=[Optional()])
-    rating = RadioField("ratings", choices=[(0, "Any"),(3,"3+"),(4,"4+"),(4.5,"4.5+")], default=0, validators=[Optional()])
+    rating = RadioField("ratings", choices=[(0, "Any"),(3,"3+"),(4,"4+"),(4.5,"4.5+")], default=0, validators=[Optional()], coerce=float)
     minimum_price = IntegerField("minimum price", default=0, validators=[Optional()])
     maximum_price = IntegerField("maximum price", default=1000, validators=[Optional()])
     courses = IntegerField("courses", default=0, validators=[Optional()])
