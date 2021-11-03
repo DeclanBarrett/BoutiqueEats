@@ -124,4 +124,6 @@ class FilterRestaurantsForm(FlaskForm):
     courses = IntegerField("courses", default=0, validators=[Optional()])
     submit = SubmitField("submit")
 
+class CancelRestaurantForm(FlaskForm):
+    cancel = SubmitField("cancel today")
 
