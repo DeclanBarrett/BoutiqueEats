@@ -77,7 +77,12 @@
                         <div class="col col-lg-6">
                             <h6>booked on {{ booking.reservation_created.strftime("%A, %d %b.") }}</h6>
                             <h6>order id: #{{ booking.reservation_id }}</h6>
+                        </div>
+                        <div class="col col-lg-6">
                             <h6>restaurant id: #{{ booking.restaurant_id }}</h6>
+                            {% if booking.reservation_status != None %}
+                            <h6>status: {{ booking.reservation_status }}</h6>
+                            {% endif %}
                         </div>
                     </div>
                     <a href="{{url_for('restaurants.restaurant', id=booking.restaurant_id)}}"

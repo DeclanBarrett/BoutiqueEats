@@ -102,19 +102,7 @@ class Reservation(db.Model):
     reservation_created = db.Column(db.DateTime, default=datetime.now())
 
     user_order = db.Column(db.String(300))
+    reservation_status = db.Column(db.String(100))
 
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.restaurant_id'))
     id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    reservations = db.relationship('ReservationStatus', backref='reservation')
-
-# Reservation Statuses that have occured to the reservation
-class ReservationStatus(db.Model):
-    __tablename__ = 'reservationstatuses'
-    __table_args__ = {'extend_existing': True}
-
-    reservation_status_id = db.Column(db.Integer, primary_key=True)
-    status = db.Column(db.String(100), nullable=False)
-    max_quantity = db.Column(db.Integer)
-
-    reservation_id = db.Column(db.Integer, db.ForeignKey('reservations.reservation_id'))

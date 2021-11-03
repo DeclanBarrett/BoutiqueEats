@@ -76,9 +76,18 @@
                         </div>
                     </div>
 
+                    <div class="row mt-1">
+                        <div class="card-text card-seats">
+                            {% if restaurant.statuses[-1].status != "cancelled" %}
+                            <form method="post"
+                                action="{{url_for('users.cancel', restaurant=restaurant.restaurant_id)}}">
+                                {{ cancel_form.csrf_token }}
+                                {{ cancel_form.cancel (class="btn btn-outline-dark") }}
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
 
-                    <a href="{{url_for('restaurants.restaurant', id=restaurant.restaurant_id)}}"
-                        class="stretched-link"></a>
                 </div>
             </div>
         </div>

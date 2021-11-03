@@ -1,7 +1,8 @@
+import datetime
 from flask import Blueprint, render_template, url_for, request, flash
 from flask_login.utils import login_required, current_user
 from wtforms import form
-from website.forms import CommentForm, FilterRestaurantsForm, RestaurantForm, ReservationForm
+from website.forms import CancelRestaurantForm, CommentForm, FilterRestaurantsForm, RestaurantForm, ReservationForm
 from website.models import Reservation, Restaurant, RestaurantOpeningHours, RestaurantStatus, Comment
 from . import db
 import os
@@ -117,6 +118,10 @@ def filtered_index():
 @login_required
 def bookings():
     bookings = Reservation.query.filter_by(user=current_user).all()
+    for booking in bookings:
+        if booking.reservation_time < datetime.datetime.now():
+            booking.reservation_status = 'inactive'
+    db.session.commit()
     return render_template("bookings.html", show_modal=request.args.get('show_modal'), bookings = bookings)
 
 @bp.route('/createrestaurant', methods=["GET", "POST"])
@@ -228,6 +233,7 @@ def reservation(restaurant):
             quantity = reservation_form.quantity.data,
             reservation_time = reservation_form.time.data,
             user_order = reservation_form.order.data,
+            reservation_status = "upcoming",
             restaurant = restaurant_obj,
             user = current_user
         )
@@ -274,14 +280,33 @@ def comment(restaurant):
 @login_required
 def users_restaurants():
     restaurants = Restaurant.query.filter_by(user=current_user).all()
+    cancel_form = CancelRestaurantForm()
     booking_space = []
     is_open_today = []
     for restaurant in restaurants:
         set_todays_status(restaurant)
         booking_space.append(restaurant_space(restaurant, date.today()))
         is_open_today.append(check_open_today(restaurant, date.today()))
-    return render_template("users_restaurants.html", restaurants=restaurants, booking_space = booking_space, today=date.today(), is_open_today = is_open_today)
+    return render_template("users_restaurants.html", restaurants=restaurants, booking_space = booking_space, today=date.today(), is_open_today = is_open_today, cancel_form = cancel_form)
 
+@user_bp.route('/cancel/<restaurant>', methods=["GET", "POST"])
+@login_required
+def cancel(restaurant):
+    cancel_form = CancelRestaurantForm()
+    restaurant_obj = db.session.query(Restaurant).filter_by(restaurant_id=restaurant).first()
+    if cancel_form.validate_on_submit():
+        restaurant_status = RestaurantStatus(status="cancelled",
+                                                restaurant=restaurant_obj)
+        db.session.add(restaurant_status)
+        for reservation in restaurant_obj.reservations:
+            if reservation.reservation_time.date() == date.today():
+                reservation.reservation_status = "cancelled"
+        db.session.commit()
+        return redirect(url_for("restaurants.restaurant", id=restaurant))
+    else:
+        flash_errors(cancel_form)
+    return redirect(url_for("users.users_restaurants"))
+            
 #error handlers
 @error_bp.app_errorhandler(404)
 def page_not_found(e):
