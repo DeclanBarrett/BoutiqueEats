@@ -101,7 +101,7 @@ class Reservation(db.Model):
     reservation_time = db.Column(db.DateTime, default=datetime.now())
     reservation_created = db.Column(db.DateTime, default=datetime.now())
 
-    order = db.Column(db.String(300))
+    user_order = db.Column(db.String(300))
 
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.restaurant_id'))
     id = db.Column(db.Integer, db.ForeignKey('users.id'))

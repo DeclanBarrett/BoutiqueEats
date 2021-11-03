@@ -213,7 +213,7 @@ def reservation(restaurant):
         reservation = Reservation(
             quantity = reservation_form.quantity.data,
             reservation_time = reservation_form.time.data,
-            order = reservation_form.order.data,
+            user_order = reservation_form.order.data,
             restaurant = restaurant_obj,
             user = current_user
         )
