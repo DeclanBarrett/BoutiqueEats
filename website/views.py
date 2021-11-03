@@ -15,6 +15,7 @@ bp = Blueprint('main', __name__)
 
 restaurant_bp = Blueprint('restaurants', __name__, url_prefix="/restaurants" )
 
+#check restaurant space on day
 def restaurant_space(restaurant, space_on_date):
     current_booking_quantity = 0
     for reservation in restaurant.reservations:
@@ -22,6 +23,7 @@ def restaurant_space(restaurant, space_on_date):
             current_booking_quantity += reservation.quantity
     return restaurant.max_reservations - current_booking_quantity
 
+#update todays staus if not already updated
 def set_todays_status(restaurant):
     if restaurant.statuses[-1].status != "inactive":
         if restaurant.statuses[-1].at_time.date() != date.today():
@@ -30,6 +32,7 @@ def set_todays_status(restaurant):
             db.session.add(restaurant_status)
             db.session.commit()
 
+#checks if the restaurant is open at a specific time
 def check_opening_times(restaurant, time_to_check):
     for day_tuple in restaurant.opening_hours:
             if (day_tuple.day_of_the_week.lower() == time_to_check.strftime("%A").lower()):
@@ -37,6 +40,7 @@ def check_opening_times(restaurant, time_to_check):
                     return True
     return False
 
+#checks if the restaurant is open on that day in general
 def check_open_today(restaurant, time_to_check):
     for day_tuple in restaurant.opening_hours:
         if (day_tuple.day_of_the_week.lower() == time_to_check.strftime("%A").lower()):
