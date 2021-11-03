@@ -51,6 +51,16 @@ def check_open_today(restaurant, time_to_check):
             return True
     return False
 
+#flash the errors from the forms
+def flash_errors(form):
+    """Flashes form errors"""
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'danger')
+
 @bp.route('/')
 def index():
     filtered_form = FilterRestaurantsForm()
@@ -67,7 +77,6 @@ def index():
 def filtered_index():
     filter_form = FilterRestaurantsForm()
     if filter_form.validate_on_submit():
-        
         name = filter_form.name.data
         cuisine = filter_form.cuisine_type.data
         num_courses = filter_form.courses.data 
@@ -92,7 +101,7 @@ def filtered_index():
                 restaurants.append(restaurant)
                 
     else:
-        print("invalid filtering")
+        flash_errors(filter_form)
         restaurants = Restaurant.query.all()
     for fieldName, errorMessages in filter_form.errors.items():
         for err in errorMessages:
@@ -163,6 +172,8 @@ def createrestaurant():
         flash("Successfully created " + restaurant.name, 'success')
         
         return redirect(url_for('main.index'))
+    else:
+        flash_errors(form_restaurant)
     return render_template("postform.html",form_restaurant=form_restaurant)
 
 
@@ -234,7 +245,9 @@ def reservation(restaurant):
             flash("Reservation at " + restaurant_obj.name + " cannot be created since the restaurant is " + current_status, 'danger')
         elif (enough_space == False):
             flash("Reservation at " + restaurant_obj.name + " cannot be created since the restaurant does not have enough spaces left", 'danger')
-    
+    else:
+        flash_errors(reservation_form)
+
     return redirect(url_for("restaurants.restaurant", id=restaurant))
 
 @restaurant_bp.route('/<restaurant>/comment', methods=["GET", "POST"])
@@ -252,6 +265,9 @@ def comment(restaurant):
         db.session.add(comment)
         db.session.commit()
         flash("Your comment has been posted", 'success')
+    else:
+        flash_errors(comment_form)
+
     return redirect(url_for("restaurants.restaurant", id=restaurant))
 
 @user_bp.route('/restaurants')
