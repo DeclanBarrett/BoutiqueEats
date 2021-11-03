@@ -32,7 +32,11 @@ def restaurant_space(restaurant, space_on_date):
 def set_todays_status(restaurant):
     if restaurant.statuses[-1].status != "inactive":
         if restaurant.statuses[-1].at_time.date() != date.today():
-            restaurant_status = RestaurantStatus(status="upcoming",
+            if restaurant_space(restaurant, date.today()) > 0:
+                restaurant_status = RestaurantStatus(status="upcoming",
+                                            restaurant=restaurant)
+            else:
+                restaurant_status = RestaurantStatus(status="booked",
                                             restaurant=restaurant)
             db.session.add(restaurant_status)
             db.session.commit()
@@ -221,12 +225,14 @@ def reservation(restaurant):
         if (restaurant_space(restaurant_obj, reservation_form.time.data.date()) - reservation_form.quantity.data >= 0):
             enough_space = True
 
-        if (restaurant_space(restaurant_obj, reservation_form.time.data.date()) - reservation_form.quantity.data <= 0):
-            restaurant_status = RestaurantStatus(status="booked",
-                                                restaurant=restaurant_obj)
-        else:
-            restaurant_status = RestaurantStatus(status="upcoming",
-                                                restaurant=restaurant_obj)
+        if (reservation_form.time.data.date() == date.today()):
+            if (restaurant_space(restaurant_obj, reservation_form.time.data.date()) - reservation_form.quantity.data <= 0):
+                restaurant_status = RestaurantStatus(status="booked",
+                                                    restaurant=restaurant_obj)
+            else:
+                restaurant_status = RestaurantStatus(status="upcoming",
+                                                    restaurant=restaurant_obj)
+            db.session.add(restaurant_status)
             
 
         reservation = Reservation(
@@ -240,7 +246,6 @@ def reservation(restaurant):
 
         if (should_commit and appropriate_status and enough_space):
             db.session.add(reservation)
-            db.session.add(restaurant_status)
             db.session.commit()
             return redirect(url_for("main.bookings", show_modal=True))
         elif (should_commit == False):
