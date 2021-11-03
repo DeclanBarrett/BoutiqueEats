@@ -62,7 +62,8 @@
             <hr class="info-line">
 
             <p class="info-heading">
-                {% if open_today %}
+                {% if open_today and
+                (restaurant.statuses[-1].status == "upcoming" or restaurant.statuses[-1].status == "booked") %}
                 open
                 {% else %}
                 closed
