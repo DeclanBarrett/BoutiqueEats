@@ -88,7 +88,7 @@ def filtered_index():
         restaurants = Restaurant.query.all()
     for fieldName, errorMessages in filter_form.errors.items():
         for err in errorMessages:
-            print(err)
+            print(fieldName + " " + err)
     booking_space = []
     is_open_today = []
     for restaurant in restaurants:
