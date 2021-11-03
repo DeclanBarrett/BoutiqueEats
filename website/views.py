@@ -22,14 +22,38 @@ def restaurant_space(restaurant, space_on_date):
             current_booking_quantity += reservation.quantity
     return restaurant.max_reservations - current_booking_quantity
 
+def set_todays_status(restaurant):
+    if restaurant.statuses[-1].status != "inactive":
+        if restaurant.statuses[-1].at_time.date() != date.today():
+            restaurant_status = RestaurantStatus(status="upcoming",
+                                            restaurant=restaurant)
+            db.session.add(restaurant_status)
+            db.session.commit()
+
+def check_opening_times(restaurant, time_to_check):
+    for day_tuple in restaurant.opening_hours:
+            if (day_tuple.day_of_the_week.lower() == time_to_check.strftime("%A").lower()):
+                if (day_tuple.start_time <= time_to_check.time() and day_tuple.end_time >= time_to_check.time()):
+                    return True
+    return False
+
+def check_open_today(restaurant, time_to_check):
+    for day_tuple in restaurant.opening_hours:
+        if (day_tuple.day_of_the_week.lower() == time_to_check.strftime("%A").lower()):
+            return True
+    return False
+
 @bp.route('/')
 def index():
     filtered_form = FilterRestaurantsForm()
     restaurants = Restaurant.query.all()
     booking_space = []
+    is_open_today = []
     for restaurant in restaurants:
+        set_todays_status(restaurant)
         booking_space.append(restaurant_space(restaurant, date.today()))
-    return render_template("index.html", restaurants=restaurants, filter_form = filtered_form, booking_space = booking_space)
+        is_open_today.append(check_open_today(restaurant, date.today()))
+    return render_template("index.html", restaurants=restaurants, filter_form = filtered_form, booking_space = booking_space, today=date.today(), is_open_today = is_open_today)
 
 @bp.route('/filters', methods=["GET", "POST"])
 def filtered_index():
@@ -66,9 +90,11 @@ def filtered_index():
         for err in errorMessages:
             print(err)
     booking_space = []
+    is_open_today = []
     for restaurant in restaurants:
         booking_space.append(restaurant_space(restaurant, date.today()))
-    return render_template("index.html", restaurants=restaurants, filter_form = filter_form, booking_space = booking_space)
+        is_open_today.append(check_open_today(restaurant, date.today()))
+    return render_template("index.html", restaurants=restaurants, filter_form = filter_form, booking_space = booking_space, today=date.today(), is_open_today = is_open_today)
 
 @bp.route('/bookings')
 @login_required
@@ -141,7 +167,8 @@ def restaurant(id):
     comment_form = CommentForm()
     reservation_form = ReservationForm()
     restaurant = Restaurant.query.filter_by(restaurant_id = id).first()
-    return render_template("restaurant.html", restaurant=restaurant, comment_form=comment_form, reservation_form=reservation_form)
+    space = restaurant_space(restaurant, date.today())
+    return render_template("restaurant.html", restaurant=restaurant, comment_form=comment_form, reservation_form=reservation_form, space=space, open_today = check_open_today(restaurant, date.today()))
 
 
 @restaurant_bp.route('/<restaurant>/reservation', methods=["GET", "POST"])
@@ -152,11 +179,8 @@ def reservation(restaurant):
     if reservation_form.validate_on_submit():
         
         #checking whether the reservation is within opening hours
-        should_commit = False 
-        for day_tuple in restaurant_obj.opening_hours:
-            if (day_tuple.day_of_the_week.lower() == reservation_form.time.data.strftime("%A").lower()):
-                if (day_tuple.start_time <= reservation_form.time.data.time() and day_tuple.end_time >= reservation_form.time.data.time()):
-                    should_commit = True
+        should_commit = check_opening_times(restaurant_obj, reservation_form.time.data)
+        
         #checking the current status on the day
         appropriate_status = False
         statuses = []
@@ -166,12 +190,14 @@ def reservation(restaurant):
 
         current_status = "unavailable"
         if (len(statuses) > 0):
-            current_status = statuses[0].status
-            if (statuses[0].status == "upcoming"):
+            current_status = statuses[-1].status
+            if (statuses[-1].status == "upcoming"):
                 appropriate_status = True
-        else:
+        elif (restaurant_obj.statuses[-1].status != "inactive"):
             appropriate_status = True
-
+        else:
+            current_status = statuses[-1].status
+        
         enough_space = False
         if (restaurant_space(restaurant_obj, reservation_form.time.data.date()) - reservation_form.quantity.data >= 0):
             enough_space = True
@@ -209,7 +235,6 @@ def comment(restaurant):
     comment_form = CommentForm()
     restaurant_obj = Restaurant.query.filter_by(restaurant_id=restaurant).first()
     if comment_form.validate_on_submit():
-        print("comment valid")
         comment = Comment(
             text=comment_form.text.data,
             user_rating = comment_form.user_rating.data,
@@ -219,5 +244,5 @@ def comment(restaurant):
 
         db.session.add(comment)
         db.session.commit()
-    print("Should see this after a valid comment")
+        flash("Your comment has been posted", 'success')
     return redirect(url_for("restaurants.restaurant", id=restaurant))
