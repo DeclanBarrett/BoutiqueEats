@@ -1,29 +1,13 @@
 from database_population_tests import *
 
-#test users
-add_test_user_neo()
-add_test_user_internette()
-add_test_user_simon()
-add_test_user_rock()
-add_test_user_matt()
-add_test_user_sweeney()
+fill_comments()
 
-#test restaurants
-add_test_restaurant_hairy()
-add_test_restaurant_hjs()
+fill_reservations()
 
-#test restaurant comments
-#neo comment on hairy
-add_test_comment_hairy()
-# internette comment on hjs
-add_test_comment_hjs()
+fill_restaurantopeninghours()
 
-#test restaurant status
-#hairy
-add_test_restaurantstatus_hairy()
-#hjs
-add_test_restaurantstatus_hjs()
+fill_restaurants()
 
-#test reservation
+fill_status()
 
-
+fill_users()
