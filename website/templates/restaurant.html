@@ -23,7 +23,8 @@
 
     <div class="row">
         <div class="col-lg-4 col-sm-6">
-            <h4>{{ restaurant.cuisine_type}}, {{restaurant.num_courses}} courses</h4>
+            <h4>{% if restaurant.cuisine_type == "None" %}
+                variety{% else %}{{restaurant.cuisine_type}}{%endif%}, {{restaurant.num_courses}} courses</h4>
             <h5>{{ restaurant.caption }}</h5>
         </div>
 

@@ -45,7 +45,11 @@
                     <div class="row">
                         <div class="col-8 col-lg-6">
                             <p class="card-text card-cuisine">
+                                {% if restaurant.cuisine_type == "None" %}
+                                variety
+                                {% else %}
                                 {{ restaurant.cuisine_type }}
+                                {% endif %}
                             </p>
                         </div>
 
