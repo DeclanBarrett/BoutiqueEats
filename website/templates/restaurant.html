@@ -16,7 +16,7 @@
             <h3> {% if average|count > 0 %}
                 {{ average | sum / average | count}}
                 {% else %}
-                new
+                n/a
                 {% endif %}&#9733;</h3>
         </div>
     </div>
@@ -28,21 +28,8 @@
         </div>
 
         <!-- Restaurant booking modal -->
-        <div class="col-lg-8 col-sm-6 btn-align mt-1">
-            {% import 'reservation.html' as reservation %}
-            {{reservation.reservation_creation(restaurant, reservation_form)}}
-
-            <p class="seat-alert">
-                {% if (restaurant.statuses[-1].status == "upcoming") and open_today %}
-                {{ space }} tables left
-                {% else %}
-                {{ restaurant.statuses[-1].status }}
-                {% endif %}
-            </p>
-        </div>
-
-
-
+        {% import 'reservation.html' as reservation %}
+        {{reservation.reservation_creation(restaurant, reservation_form)}}
     </div>
 
 
@@ -62,12 +49,7 @@
             <hr class="info-line">
 
             <p class="info-heading">
-                {% if open_today and
-                (restaurant.statuses[-1].status == "upcoming" or restaurant.statuses[-1].status == "booked") %}
                 open
-                {% else %}
-                closed
-                {% endif %}
             </p>
             <p>
                 {% for open_time in restaurant.opening_hours%}
