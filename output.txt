@@ -1,0 +1,100 @@
+Annette (4):
+      Minor changes to website formatting
+      error handling for 404 and 500 with a redirect link
+      added error.html page
+      updated formatting of comment button
+
+DeclanBarrett (71):
+      Added all of the previously worked on HTML and CSS to the static files. Segmented between index and base, with base being the standard setup and navbar. Implemented a basic register and login system which required building the models - which has also been created for the entire project based off of documentation provided but can and probably shoudl be edited to fit new requirements.
+      Specified that the existing card on the homepage is a placeholder - and made it so that when there is restaurants added to the detabase they will fill the index page with cards (may need more formatting surroundiing rows)
+      Moved images to images instead of img - got the create restaurants page working without the current status, ratings or comments connecting to it - restaurants can be created and their images uploaded.
+      Added a maximum number of reservations that can be made. Got the status working in the Index page.
+      wiped database - added a caption to the restaurant form
+      Implemented Comments, including the star rating in the Index
+      Merge branch 'master' of https://github.com/DeclanBarrett/BoutiqueEats
+      Fixed the merge bugs - comments working and the index and restaurant both have working star averages
+      Removed random photos and added the database to the gitignore so that when updating the database will need to be overwritten and wont cause problems where the database structure no longer matches the form design.
+      Created a new branch called unstable to save the project when there is still errors in the code. Do not pull from this repository. Created account profile pictures and a default picture
+      Put the reservations form into its own html file and made it a widget. Comments are still working but the reservation form exists without it actually creating the reservation of checking that it is within opening times
+      merged unstable into main
+      Opening times is now fulling working
+      add sitedata to ignore
+      Merge branch 'unstable' into declan-unstable
+      Merge branch 'master' into declan-unstable
+      Update .gitignore
+      removing since the \ is the escape character
+      Delete site data
+      updating gitignore
+      Update .gitignore
+      Delete sitedata.sqlite
+      hopefully finally fixing this messy git
+      Merge branch 'declan-unstable' of https://github.com/DeclanBarrett/BoutiqueEats into declan-unstable
+      Delete database_population_tests.cpython-39.pyc
+      Merge branch 'master' into declan-unstable
+      Merge branch 'declan-unstable' of https://github.com/DeclanBarrett/BoutiqueEats into declan-unstable
+      midway through implementing booking - broken
+      Booking implemented - pop up appears in the bookings window
+      Attempting to get Heroku deployment working again
+      Still not working - but attempting to have database creation afterwards
+      Unignoring the sql database so that Heroku can use it
+      Made index filtering completely work
+      Made it so that bookings can only occur within opening hours
+      upgraded error handling to be stylish and receive categories and use these categories to determine the colour of the alert.
+      changing git ignore since there are errors in the heroku
+      Still has the create restaurant error
+      changed the requirements file since create restaurants works locally but not on host machine
+      Changed it back
+      Changed the structure of the status form causing heroku issues
+      making it so that each day can be booked out individually
+      Completed status updates and showing the information
+      Merge branch 'declan-unstable'
+      proper open in restaurant and attempting to fix heroku filter error
+      Merge branch 'declan-unstable'
+      Fixed reservation heroku error - still needs filtering fix
+      Merge branch 'master' of https://github.com/DeclanBarrett/BoutiqueEats
+      Committing main update to own branch - only including relevant changes
+      added more reservations
+      Merge branch 'declan-unstable'
+      Committing to main - updates are superficial - still need to merge declan unstable properly
+      Merge branch 'master' of https://github.com/DeclanBarrett/BoutiqueEats
+      added function comments
+      Updating a large range of elements so that the main believes that there are updates available
+      Merge branch 'declan-unstable'
+      added another reservation
+      coerce float in radio field
+      Created a created restaurant page - new account - new bps and error handling
+      cancel form
+      Full error handling
+      Deleted reservation status and replaced with a single field - added being able to cancel the restaurant today - and have the bookings be cancelled as well
+      finally have an icon
+      fixed 'none' showing when the default is selected - now it is variety
+      obligatory database update
+      fixing a future reservation effecting a current restaurant status
+      database reset
+      Update and Delete Working for Restaurants
+      Merge branch 'master' into declan-unstable
+      editing the status works
+      Didn't mean to edit this straight on views but okay
+      made the error page look nice
+
+Michael (8):
+      Logout Messages/Routing
+      Login required - booking history
+      Fixed Logo Routing, Center Align Forms
+      Added Button Styling to Login/Register Forms
+      Changed Button Sizes
+      User forms update
+      Added some comments
+      Added code comments
+
+unknown (9):
+      Some dummy data added to db
+      Update sitedata.sqlite
+      added missing profile pic for simon
+      Updated populate_db script
+      Revert "Updated populate_db script"
+      changed models and views instances of 'order' to 'user_order' was having issues with populating the db as order is a sql keyword.
+      Merge branch 'master' into simon-unstable
+      Revert "Merge branch 'master' into simon-unstable"
+      database fix
+
