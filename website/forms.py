@@ -71,7 +71,7 @@ class DayHoursForm(Form):
     end = TimeField('end', validators=[Optional()])
 
 class RestaurantForm(FlaskForm):
-    restaurant_name = StringField("restaurant name", validators=[InputRequired()])
+    name = StringField("restaurant name", validators=[InputRequired()])
     street = StringField("street", validators=[InputRequired()])
     suburb = StringField("suburb", validators=[InputRequired()])
 
@@ -83,7 +83,7 @@ class RestaurantForm(FlaskForm):
     description = TextAreaField("description", validators=[InputRequired(), Length(min=10, max=400)])
     price = IntegerField("price per person", validators=[NumberRange(min=0)])
     num_courses = IntegerField("num. of courses", validators=[NumberRange(1, 20), InputRequired()])
-    max_num_reservations = IntegerField("num. available spots", validators=[InputRequired()])
+    max_reservations = IntegerField("num. available spots", validators=[InputRequired()])
     website = URLField("website")
     image = FileField('restaurant image',
                       validators=[
@@ -93,9 +93,9 @@ class RestaurantForm(FlaskForm):
                       ])
     status = RadioField("set status", choices=[("upcoming", "upcoming"), ("inactive", "inactive"), ("booked","booked"), ("cancelled", "cancelled")])
 
-    opening_hours = FieldList(FormField(DayHoursForm), min_entries=7) #validators=[validate_both_fields, validate_enddate_field]
+    opening_hours = FieldList(FormField(DayHoursForm), min_entries=7)
     
-    submit = SubmitField("post restaurant")
+    submit = SubmitField("submit")
 
 
 class RestaurantStatusForm(FlaskForm):

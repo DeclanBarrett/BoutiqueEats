@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="row mt-1">
-                        <div class="card-text card-seats">
+                        <div class="col-12 col-lg-3 col-md-4">
                             {% if restaurant.statuses[-1].status != "cancelled" %}
                             <form method="post"
                                 action="{{url_for('users.cancel', restaurant=restaurant.restaurant_id)}}">
@@ -89,6 +89,29 @@
                                 {{ cancel_form.cancel (class="btn btn-outline-dark") }}
                             </form>
                             {% endif %}
+                        </div>
+
+                        <div class="col-12 col-lg-3 col-md-4">
+                            <a class="btn btn-outline-dark"
+                                href="{{url_for('users.inactive', restaurant=restaurant.restaurant_id)}}" role="button">
+                                set inactive
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-lg-3 col-md-4">
+                            <a class="btn btn-outline-dark"
+                                href="{{url_for('restaurants.edit_restaurant', restaurant=restaurant.restaurant_id)}}"
+                                role="button">
+                                edit restaurant
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-lg-3 col-md-4">
+                            <a class="btn btn-outline-dark"
+                                href="{{url_for('restaurants.delete_restaurant', restaurant=restaurant.restaurant_id)}}"
+                                role="button">
+                                delete restaurant
+                            </a>
                         </div>
                     </div>
 

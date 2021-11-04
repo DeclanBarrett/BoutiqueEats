@@ -10,13 +10,14 @@
 
 <div class="container">
     <div class="row mt-5 mb-2">
-        <h2>post a restaurant</h2>
+        <h2>edit restaurant</h2>
     </div>
 
     <!-- Form section-->
     <div class="row">
         <div class="col-lg-8 col-md-9">
-            <form method="post" action="{{url_for('main.createrestaurant')}}" enctype=multipart/form-data>
+            <form method="post" action="{{url_for('restaurants.edit_restaurant', restaurant=restaurant.restaurant_id)}}"
+                enctype=multipart/form-data>
                 {{ form_restaurant.csrf_token }}
                 <!-- Restaurant name & location-->
                 <div class="row mt-2 mb-2">
@@ -119,59 +120,6 @@
                         </div>
                     </div>
                 </div>
-                <!--
-                <div class="row mt-4">
-                    <div class="col-12 col-lg-5">
-                        <h4>enter reservation details</h4>
-                    </div>
-
-                    <div class="col col-lg-6 ">
-                        <div class="row">
-                            <div class="col-xl-4 col-lg-5">
-                                <button class="btn btn-outline-dark" type="button" id="reserveAdd">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                        class="bi bi-plus" viewBox="0 0 16 16">
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                                    </svg>
-                                    add reservation
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" id="reserveContainer">
-                        <div class="col-12 col-lg- col-md-10 mt-3" id="reserveSection">
-                            <section id="reserveCard">
-                                <div class="shadow p-3 mb-3 bg-body rounded">
-
-                                    <div class="col-12 col-lg-8 col-md-10">
-                                        <div class="row mt-3">
-                                            <div class="col-8 col-lg-4 col-md-4 mb-3 mb-xl-0">
-                                                <div class="form-label" for="date">reservation date</div>
-                                                <input id="date" class="form-control" type="date" min="2021-11-01"
-                                                    max="2021-11-30" required>
-                                            </div>
-
-                                            <div class="col-6 col-lg-4 col-md-4 mb-3 mb-xl-0">
-                                                <div class="form-label" for="reservtime">time</div>
-                                                <input id="reservtime" class="form-control" type="time" required>
-                                            </div>
-
-                                            <div class="col-6 col-lg-4 col-md-4">
-                                                <div class="form-label" for="quantity">quantity</div>
-                                                <input id="quantity" class="form-control" type="number" min="1" max="20"
-                                                    required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                        </div>
-                    </div>
-                -->
-                {% import 'create_open_hours.html' as create_open_hours %}
-                {{create_open_hours.set_opening_hours(form_restaurant)}}
 
                 <div class="row mt-5 mb-5">
                     <div class="col-lg-4">

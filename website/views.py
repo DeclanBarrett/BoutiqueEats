@@ -148,14 +148,14 @@ def createrestaurant():
     if form_restaurant.validate_on_submit():
         print('form was validated', 'success')
         db_file_path = check_upload_file(form_restaurant)
-        restaurant = Restaurant(name=form_restaurant.restaurant_name.data,
+        restaurant = Restaurant(name=form_restaurant.name.data,
                                 street=form_restaurant.street.data,
                                 suburb=form_restaurant.suburb.data,
                                 caption=form_restaurant.caption.data,
                                 description=form_restaurant.description.data,
                                 price=form_restaurant.price.data,
                                 cuisine_type=form_restaurant.cuisine_type.data,
-                                max_reservations=form_restaurant.max_num_reservations.data,
+                                max_reservations=form_restaurant.max_reservations.data,
                                 num_courses=form_restaurant.num_courses.data,
                                 website=form_restaurant.website.data,
                                 image=db_file_path,
@@ -281,6 +281,46 @@ def comment(restaurant):
 
     return redirect(url_for("restaurants.restaurant", id=restaurant))
 
+@restaurant_bp.route('/<restaurant>/edit', methods=["GET", "POST"])
+@login_required
+def edit_restaurant(restaurant):
+    restaurant_obj = db.session.query(Restaurant).filter_by(restaurant_id=restaurant).first()
+    form_restaurant = RestaurantForm(obj = restaurant_obj)
+
+    if form_restaurant.validate_on_submit():
+        print('form was validated', 'success')
+        db_file_path = check_upload_file(form_restaurant)
+        restaurant_obj.name=form_restaurant.name.data
+        restaurant_obj.street=form_restaurant.street.data
+        restaurant_obj.suburb=form_restaurant.suburb.data
+        restaurant_obj.caption=form_restaurant.caption.data
+        restaurant_obj.description=form_restaurant.description.data
+        restaurant_obj.price=form_restaurant.price.data
+        restaurant_obj.cuisine_type=form_restaurant.cuisine_type.data
+        restaurant_obj.max_reservations=form_restaurant.max_reservations.data
+        restaurant_obj.num_courses=form_restaurant.num_courses.data
+        restaurant_obj.website=form_restaurant.website.data
+        restaurant_obj.image=db_file_path
+
+        db.session.commit()
+        flash("Successfully edited " + restaurant_obj.name, 'success')
+        
+        return redirect(url_for('main.index'))
+    else:
+        flash_errors(form_restaurant)
+    return render_template("edit_restaurant.html",form_restaurant=form_restaurant, restaurant=restaurant_obj)
+
+@restaurant_bp.route('/<restaurant>/delete', methods=["GET", "POST"])
+@login_required
+def delete_restaurant(restaurant):
+    restaurant_obj = db.session.query(Restaurant).filter_by(restaurant_id=restaurant).first()
+    db.session.delete(restaurant_obj)
+    db.session.commit()
+    flash("Successfully deleted", 'success')
+        
+    return redirect(url_for('main.index'))
+
+
 @user_bp.route('/restaurants')
 @login_required
 def users_restaurants():
@@ -311,7 +351,19 @@ def cancel(restaurant):
     else:
         flash_errors(cancel_form)
     return redirect(url_for("users.users_restaurants"))
-            
+
+@user_bp.route('/inactive/<restaurant>', methods=["GET", "POST"])
+@login_required
+def inactive(restaurant):
+    restaurant_obj = db.session.query(Restaurant).filter_by(restaurant_id=restaurant).first()
+    restaurant_status = RestaurantStatus(status="inactive",
+                                            restaurant=restaurant_obj)
+    db.session.add(restaurant_status)
+    for reservation in restaurant_obj.reservations:
+        reservation.reservation_status = "inactive"
+    db.session.commit()
+    return redirect(url_for("restaurants.restaurant", id=restaurant))
+
 #error handlers
 @error_bp.app_errorhandler(404)
 def page_not_found(e):

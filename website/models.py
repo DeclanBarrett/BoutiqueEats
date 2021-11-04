@@ -60,10 +60,10 @@ class Restaurant(db.Model):
 
     # ... Create the Comments db.relationship
     # relation to call destination.comments and comment.destination
-    comments = db.relationship('Comment', backref='restaurant')
-    statuses = db.relationship('RestaurantStatus', backref='restaurant')
-    opening_hours = db.relationship('RestaurantOpeningHours', backref='restaurant')
-    reservations = db.relationship('Reservation', backref='restaurant')
+    comments = db.relationship('Comment', backref='restaurant', cascade="all, delete-orphan")
+    statuses = db.relationship('RestaurantStatus', backref='restaurant', cascade="all, delete-orphan" )
+    opening_hours = db.relationship('RestaurantOpeningHours', backref='restaurant', cascade="all, delete-orphan")
+    reservations = db.relationship('Reservation', backref='restaurant', cascade="all, delete-orphan")
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):  #string print method
