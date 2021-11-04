@@ -315,10 +315,12 @@ def cancel(restaurant):
 #error handlers
 @error_bp.app_errorhandler(404)
 def page_not_found(e):
-    flash("Page is not available", 'danger')
-    return redirect(url_for("main.index"))
+    return render_template('error.html'), 404
+    # flash("Page is not available", 'danger')
+    # return redirect(url_for("main.index"))
 
 @error_bp.app_errorhandler(500)
 def internal_server_error(e):
-    flash("Internal Server Error " + e + " Please use other parts of our site in the meanwhile", 'danger')
-    return render_template("base.html")
+    return render_template('error.html'), 500
+    # flash("Internal Server Error " + e + " Please use other parts of our site in the meanwhile", 'danger')
+    # return render_template("base.html")
