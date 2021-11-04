@@ -14,7 +14,7 @@
             {% if average.append(comment.user_rating) %} {% endif %}
             {% endfor %}
             <h3> {% if average|count > 0 %}
-                {{ average | sum / average | count}}
+                {{ (average | sum / average | count)|round(1) }}
                 {% else %}
                 new
                 {% endif %}&#9733;</h3>
@@ -133,7 +133,8 @@
 
     {% else %}
     <div class="d-grid gap-2">
-        <a class="btn btn-warning bg-warning" type="button" href="{{ url_for('auth.login') }}">log in to post comments</a>
+        <a class="btn btn-warning bg-warning" type="button" href="{{ url_for('auth.login') }}">log in to post
+            comments</a>
     </div>
 
     {% endif %}

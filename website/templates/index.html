@@ -129,7 +129,7 @@
                             {% endfor %}
                             <span class="badge rounded-pill bg-success float-end">
                                 {% if average|count > 0 %}
-                                {{ average | sum / average | count}}
+                                {{ (average | sum / average | count)|round(1)}}
                                 {% else %}
                                 new
                                 {% endif %}
