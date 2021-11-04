@@ -302,6 +302,10 @@ def edit_restaurant(restaurant):
         restaurant_obj.website=form_restaurant.website.data
         restaurant_obj.image=db_file_path
 
+        print("Status Data: " + form_restaurant.status.data)
+        restaurant_status = RestaurantStatus(status=form_restaurant.status.data,
+                                            restaurant=restaurant_obj)
+        db.session.add(restaurant_status)
         db.session.commit()
         flash("Successfully edited " + restaurant_obj.name, 'success')
         
