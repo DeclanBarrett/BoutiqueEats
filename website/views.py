@@ -285,6 +285,9 @@ def comment(restaurant):
 @login_required
 def edit_restaurant(restaurant):
     restaurant_obj = db.session.query(Restaurant).filter_by(restaurant_id=restaurant).first()
+    if restaurant_obj.user_id != current_user.id:
+        flash("STOP - YOU HAVE VIOLATED THE LAW! PAY THE COURT A FINE OR SERVE YOUR SENTENCE! YOUR STOLEN GOODS ARE NOW FORFIT!", 'warning')
+        return redirect(url_for('main.index'))
     form_restaurant = RestaurantForm(obj = restaurant_obj)
 
     if form_restaurant.validate_on_submit():
@@ -318,6 +321,10 @@ def edit_restaurant(restaurant):
 @login_required
 def delete_restaurant(restaurant):
     restaurant_obj = db.session.query(Restaurant).filter_by(restaurant_id=restaurant).first()
+    if restaurant_obj.user_id != current_user.id:
+        flash("STOP - YOU HAVE VIOLATED THE LAW! PAY THE COURT A FINE OR SERVE YOUR SENTENCE! YOUR STOLEN GOODS ARE NOW FORFIT!", 'warning')
+        return redirect(url_for('main.index'))
+
     db.session.delete(restaurant_obj)
     db.session.commit()
     flash("Successfully deleted", 'success')
@@ -343,6 +350,10 @@ def users_restaurants():
 def cancel(restaurant):
     cancel_form = CancelRestaurantForm()
     restaurant_obj = db.session.query(Restaurant).filter_by(restaurant_id=restaurant).first()
+    if restaurant_obj.user_id != current_user.id:
+        flash("STOP - YOU HAVE VIOLATED THE LAW! PAY THE COURT A FINE OR SERVE YOUR SENTENCE! YOUR STOLEN GOODS ARE NOW FORFIT!", 'warning')
+        return redirect(url_for('main.index'))
+        
     if cancel_form.validate_on_submit():
         restaurant_status = RestaurantStatus(status="cancelled",
                                                 restaurant=restaurant_obj)
@@ -360,6 +371,11 @@ def cancel(restaurant):
 @login_required
 def inactive(restaurant):
     restaurant_obj = db.session.query(Restaurant).filter_by(restaurant_id=restaurant).first()
+
+    if restaurant_obj.user_id != current_user.id:
+        flash("STOP - YOU HAVE VIOLATED THE LAW! PAY THE COURT A FINE OR SERVE YOUR SENTENCE! YOUR STOLEN GOODS ARE NOW FORFIT!", 'warning')
+        return redirect(url_for('main.index'))
+
     restaurant_status = RestaurantStatus(status="inactive",
                                             restaurant=restaurant_obj)
     db.session.add(restaurant_status)
